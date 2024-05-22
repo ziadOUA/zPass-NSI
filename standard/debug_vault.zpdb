@@ -1,0 +1,86 @@
+{
+    "Facebook": {
+        "name": "Facebook",
+        "icon_path": "res/icons/facebook.png",
+        "user_name": "mymail@outlook.fr",
+        "password": "password"
+    },
+    "Google": {
+        "name": "Google",
+        "icon_path": "res/icons/google.png",
+        "user_name": "personal@gmail.com",
+        "password": "1234"
+    },
+    "Firefox Sync": {
+        "name": "Firefox Sync",
+        "icon_path": "res/icons/mozilla.png",
+        "user_name": "account@proton.me",
+        "password": "pass1234"
+    },
+    "Twitter": {
+        "name": "Twitter",
+        "icon_path": "",
+        "user_name": "mytwitterhandle",
+        "password": "tweettweet"
+    },
+    "LinkedIn": {
+        "name": "LinkedIn",
+        "icon_path": "",
+        "user_name": "mylinkedin@domain.com",
+        "password": "linkedinpass"
+    },
+    "Instagram": {
+        "name": "Instagram",
+        "icon_path": "",
+        "user_name": "insta_user123",
+        "password": "instapass"
+    },
+    "Dropbox": {
+        "name": "Dropbox",
+        "icon_path": "",
+        "user_name": "dropboxuser",
+        "password": "dropboxpass"
+    },
+    "Service 1": {
+        "name": "Service 1",
+        "icon_path": "res/icons/facebook.png",
+        "user_name": "service1_user",
+        "password": "service1_pass"
+    },
+    "Service 2": {
+        "name": "Service 2",
+        "icon_path": "res/icons/facebook.png",
+        "user_name": "service2_user",
+        "password": "service2_pass"
+    },
+    "Service 100": {
+        "name": "Service 100",
+        "icon_path": "res/icons/facebook.png",
+        "user_name": "service100_user",
+        "password": "service100_pass"
+    },
+    "Service 3": {
+        "name": "Service 3",
+        "icon_path": "res/icons/facebook.png",
+        "user_name": "service3_user",
+        "password": "service3_pass"
+    },
+    "Service 95": {
+        "name": "Service 95",
+        "icon_path": "res/icons/facebook.png",
+        "user_name": "service95_user",
+        "password": "service95_pass"
+    },
+    "Service 96": {
+        "name": "Service 96",
+        "icon_path": "res/icons/facebook.png",
+        "user_name": "service96_user",
+        "password": "service96_pass"
+    },
+    "Service 97": {
+        "name": "Service 97",
+        "icon_path": "res/icons/facebook.png",
+        "user_name": "service97_user",
+        "password": "service97_pass"
+    }
+}

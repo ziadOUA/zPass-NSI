@@ -1,0 +1,155 @@
+QMainWindow, QMessageBox {
+    background-color: $md_sys_color_surface_container_low;
+}
+
+QToolBar {
+    border: none;
+}
+
+QToolBar::separator {
+    height: 1px;
+    margin: 4px;
+    width: 1px;
+    background-color: $md_sys_color_outline_variant;
+}
+
+#toolbar_background {
+    background-color: $md_sys_color_surface_variant;
+    border-radius: 20px;
+    border: 0px;
+}
+
+QToolButton {
+    height: 28px;
+    width: 28px;
+    padding: 2px;
+    border-radius: 16px;
+    margin-top: 2px;
+}
+
+QToolButton:hover {
+    background-color: $md_sys_color_primary_fixed;
+}
+
+QLineEdit {
+    border-top-right-radius: 14px;
+    border-top-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
+
+    background-color: $md_sys_color_surface_variant;
+    color: $md_sys_color_on_surface_variant;
+    padding: 0 0 0 8px;
+}
+
+QLineEdit:focus {
+    border: 1px solid $md_sys_color_primary;
+    background-color: $md_sys_color_primary_container;
+    color: $md_sys_color_on_primary_container;
+}
+
+QPushButton {
+    border-radius: 14px;
+    border: 0px solid black;
+    background-color: $md_sys_color_primary_container;
+    color: $md_sys_color_on_primary_container;
+    padding: 6px 10px;
+}
+
+QPushButton#checkable:checked {
+    background-color: $md_sys_color_primary;
+    color: $md_sys_color_on_primary;
+}
+
+QPushButton#checkable:hover:checked {
+    background-color: $md_sys_color_primary;
+    color: $md_sys_color_on_primary;
+}
+
+QPushButton:hover {
+    background-color: $md_sys_color_primary;
+    color: $md_sys_color_on_primary;
+}
+
+QPushButton#checkable {
+    padding: none;
+}
+
+QPushButton#checkable:hover {
+    background-color: $md_sys_color_primary_container;
+    color: $md_sys_color_on_primary_container;
+}
+
+QPushButton#tertiary_button {
+    background-color: $md_sys_color_tertiary_container;
+    color: $md_sys_color_on_tertiary_container;
+}
+
+QPushButton#tertiary_button:hover {
+    background-color: $md_sys_color_tertiary;
+    color: $md_sys_color_on_tertiary;
+}
+
+QPushButton#red_button {
+    background-color: $md_sys_color_error_container;
+    color: $md_sys_color_on_error_container;
+}
+
+QPushButton#red_button:hover {
+    background-color: $md_sys_color_error;
+    color: $md_sys_color_on_error;
+}
+
+QLabel {
+    color: $md_sys_color_on_surface;
+}
+
+QLabel#m_label {
+    font-size: 24px;
+    font-family: "Inter";
+}
+
+QLabel#wrong_input {
+    color: $md_sys_color_error;
+}
+
+QLabel#zPass_label {
+    font-family: "Urbanist";
+    font-size: 48px;
+    color: $md_sys_color_on_tertiary_container;
+}
+
+QLabel#selected_entry_password_label {
+    font-family: "JetBrains Mono";
+    letter-spacing: 0px;
+}
+
+QWidget#panel {
+    border-radius: 15px;
+    background-color: $md_sys_color_surface_container_lowest;
+}
+
+QWidget#right_panel {
+    border-radius: 15px;
+    background-color: $md_sys_color_surface_container_lowest;
+}
+
+QSplitter, QSplitter::handle {
+    background-color: transparent;
+    border: none;
+}
+
+QScrollBar:horizontal {
+    height: 15px;
+    margin: 5px 10px 5px 10px;
+}
+QScrollBar::handle:horizontal {
+    background: $md_sys_color_surface_container_highest;
+    border-radius: 2px;
+    min-width: 20px;
+}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    height: 0;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}

@@ -1,0 +1,23 @@
+{
+    "vault_name": "TEST VAULT",
+    "entries": {
+        "Facebook": {
+            "name": "Facebook",
+            "icon_path": "res/icons/facebook.png",
+            "user_name": "mymail@outlook.fr",
+            "password": "password"
+        },
+        "Google": {
+            "name": "Google",
+            "icon_path": "res/icons/google.png",
+            "user_name": "personal@gmail.com",
+            "password": "1234"
+        },
+        "Firefox Sync": {
+            "name": "Firefox Sync",
+            "icon_path": "res/icons/mozilla.png",
+            "user_name": "account@proton.me",
+            "password": "pass1234"
+        }
+    }
+}
