@@ -21,6 +21,7 @@ Le projet se nommera "zPass".
 
 Le choix du module a été guidé par le fait qu'un module utilisant la technologie Qt permettait de créer des interfaces flexibles et cohérentes entre les différentes plateformes (principalement Windows et Linux). De plus, Qt  a tendance a être beaucoup plus rapide et optimisé que Tkinter (Qt utilise le C++).<br>
 Deux options s'offrent à nous : le module [PyQt](https://www.riverbankcomputing.com/software/pyqt/) et [PySide](https://pypi.org/project/PySide/).<br>
+
 Les modules sont analogues, et partagent les mêmes fonctions (ou presque), ce qui rend la documentation facile à trouver. PySide a été choisi car le module est disponible uniquement sous licence LGPL, tandis que PyQt (appartenant à Riverbank Computing) est disponible soit sous licence GPLv3 soit sous leur propre licence commerciale (si le code source du programme concerné n'est pas mis à disposition).<br>
 Un module comme PySide permet l'usage de propriétés CSS pour styliser les éléments graphiques.
 
@@ -65,6 +66,12 @@ Chiffré en utilisant un mot de passe et un code d'authentification grâce à la
 �(խ+q�^Vj��'�?B��#tT� �}��Z����yst�$K�RNY;)6ʈ�I��6��4fp}^gm����~��?�k��Q�nN`P%*�Ya��zi5�O���r9R�����Qv�t%�hM�i�".b�����S��p<X]��~|�6�[���sq�z]�>�^�SPFl}�z���g�t" ����I ��l�C4mF�Q>7H�NbEtig���$�`ptߋS�(ŀ�O�
 ����E��`�u�VG��+]��
 ```
+Grâce au module `json` de Python, on peut charger un fichier sous format JSON pour l'interpréter comme un dictionnaire. On pourra accéder au nom d'utilisateur de l'entrée "Facebook" grâce à :
+```python
+encrypted_vault = open('./vaults/Base de données.zpdb', 'r').read() # On charge les données du coffre fort chiffré
+decrypted_vault = decrypt(encrypted_vault) # On déchiffre le coffre fort et on obtient un dictionnaire avec json.load()
+facebook_username = decrypted_vault['entries']['Facebook']['username'] # La variable "facebook_username" contient maintenant le nom d'utilisateur
+```
 
 ### 2.2. Mot de passe et code d'authentification
 
@@ -83,7 +90,23 @@ La procédure de déchiffrement est donc la suivante :
 
 La même chose est réalisée pour la fonction qui chiffre la base de données.
 
-### 2.3.
+### 2.3. Fichier paramètres
+
+Le fichier paramètres est un fichier JSON qui contient, outre des paramètres comme "use_dark_theme", la liste des bases de données ainsi que leur emplacement :
+```json
+{
+    "use_dark_theme": false,
+    // Autres paramètres
+    "vaults": {
+        "Base de données": {
+            "file_path": "vaults/Base de données.zpdb"
+        },
+        "Coffre": {
+            "file_path": "vaults/Coffre.zpdb"
+        }
+    }
+}
+```
 
 ## 3. Interface graphique
 
@@ -94,3 +117,11 @@ La même chose est réalisée pour la fonction qui chiffre la base de données.
 ### 3.3. Menu d'affichage des entrées
 
 ### 3.4. Menu paramètres
+
+## 4. Bilan
+
+## 5. Notes supplémentaires
+
+### 5.1. Limite du nom de base de données
+
+Il s'agit d'une limite arbitraire que je me suis permis d'instaurer. La raison est la suivante : la longueur maximale d'un chemin pour un fichier est définie par la clé de registre "MAX_PATH" sur Windows, et est limitée à 256. Cette limite de 32 caractères pour le nom de tout nouveau coffre est là pour éviter tout problème s'y relatant. Dans le cas de Python, et de la fonction "open()", un chemin d'accès trop long génère une *OSError* [Errno 22] sur Windows.
