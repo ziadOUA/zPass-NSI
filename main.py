@@ -5,7 +5,7 @@
 888888888 88 ,adPPYYba,  ,adPPYb,88  
      a8P" 88 ""     `Y8 a8"    `Y88  
   ,d8P'   88 ,adPPPPP88 8b       88  
-,d8"      88 88,    ,88 "8a,   ,d88  GitHub : 
+,d8"      88 88,    ,88 "8a,   ,d88  GitHub : https://github.com/ziadOUA/zPass-NSI
 888888888 88 `"8bbdP"88  `"8bbdP"88  GPLv3 - NSI
 """
 
@@ -21,7 +21,7 @@ import time
 from vault_utils import create_vault, delete_vault, encrypt_vault, decrypt_vault, pad_master_password
 from themes.style import get_style_sheet
 from settings_utils import check_settings_file
-from error_codes import get_error_codes_dictionnary
+from error_codes import get_error_codes_dictionary
 
 from PySide6.QtWidgets import (QApplication, QMainWindow, QPushButton, QLineEdit, QLabel, QMessageBox, QVBoxLayout,
                                QHBoxLayout, QWidget, QScrollArea, QSplitter, QFrame, QMenuBar, QMenu, QToolBar, QComboBox,
@@ -52,12 +52,12 @@ else:
 
 version = '0.1.3-beta' # Version du programme
 
-last_correct_master_password = b'' # On garde le dernier mot de passe correct pour pouvoir vérouiller le coffre en quittant
-last_correct_vault_code = b'' # On garde le dernier code de coffre correct pour pouvoir vérouiller le coffre en quittant
-error_codes_dictionnary = get_error_codes_dictionnary() # On récupère le dictionnaire qui contient les codes d'erreurs
+last_correct_master_password = b'' # On garde le dernier mot de passe correct pour pouvoir verrouiller le coffre en quittant
+last_correct_vault_code = b'' # On garde le dernier code de coffre correct pour pouvoir verrouiller le coffre en quittant
+error_codes_dictionary = get_error_codes_dictionary() # On récupère le dictionnaire qui contient les codes d'erreurs
 
 selected_vault = '' # Nom du coffre sélectionné
-selected_entry = None # Index de l'entrée séléctionnée, None car aucune ne l'est
+selected_entry = None # Index de l'entrée sélectionnée, None, car aucune ne l'est
 
 # ══════════ Classe principale
 
@@ -86,26 +86,26 @@ class zPass(QMainWindow):
 
         # ══════════ Menus de la barre de menu
         
-        vault_menu = QMenu('Coffre fort')
+        vault_menu = QMenu('Coffre-fort')
         entries_menu = QMenu('Entrées')
         tools_menu = QMenu('Outils')
         help_menu = QMenu('Aide')
 
-        # ══════════ Actions du menu "Coffre fort"
+        # ══════════ Actions du menu "Coffre-fort"
         
-        decrypt_action = QAction('Déchiffrer le coffre fort', self)
+        decrypt_action = QAction('Déchiffrer le coffre-fort', self)
         decrypt_action.triggered.connect(self.decrypt_button_clicked)
         decrypt_action.setIcon(QIcon('./themes/light/lock_open.png'))
         
-        encrypt_action = QAction('Chiffrer le coffre fort', self)
+        encrypt_action = QAction('Chiffrer le coffre-fort', self)
         encrypt_action.triggered.connect(self.encrypt_button_clicked)
         encrypt_action.setIcon(QIcon('./themes/light/lock.png'))
         
-        new_vault_action = QAction('Nouveau coffre fort', self)
+        new_vault_action = QAction('Nouveau coffre-fort', self)
         new_vault_action.triggered.connect(self.show_vault_creation_ui)
         new_vault_action.setIcon(QIcon('./themes/light/add.png'))
         
-        delete_vault_action = QAction('Supprimer le coffre fort', self)
+        delete_vault_action = QAction('Supprimer le coffre-fort', self)
         delete_vault_action.triggered.connect(self.delete_vault_button_clicked)
         delete_vault_action.setIcon(QIcon('./themes/light/delete.png'))
         
@@ -217,9 +217,6 @@ class zPass(QMainWindow):
 
         self.main_container.setLayout(self.main_layout) # On définit "main_layout" comme mise en page de "main_container"
         self.setCentralWidget(self.root_container) # "root_container", contenant à présent tout les éléments nécessaires
-
-    def about_action(self):
-        self.create_dialog('zPass', f'zPass {version}\n© 2024 ziadOUA')
     
     def init_decrypt_vault_ui(self):
         global selected_vault
@@ -261,13 +258,13 @@ class zPass(QMainWindow):
         # ═══════════--->---> decrypt_label : Texte contenant l'action qui est sur le point d'être réalisée
         
         decrypt_label = QLabel()
-        decrypt_label.setText('Déverouillage du coffre fort')
+        decrypt_label.setText('Déverrouillage du coffre-fort')
         decrypt_label.setStyleSheet('color: grey')
         
         # ═══════════--->---> vault_selection_dropdown : Liste déroulante permettant de choisir le coffre à déchiffrer
         
         self.vault_selection_dropdown = QComboBox()
-        vault_list = self.list_available_vaults() # On obtient la liste des coffres forts existants
+        vault_list = self.list_available_vaults() # On obtient la liste des coffres-forts existants
         self.vault_selection_dropdown.addItems(vault_list) # On ajoute les coffres à la liste déroulante
         self.vault_selection_dropdown.currentTextChanged.connect(self.get_selected_vault_name)
 
@@ -420,13 +417,13 @@ class zPass(QMainWindow):
         # ═══════════--->---> new_vault_label : Texte contenant l'action qui est sur le point d'être réalisée
 
         new_vault_label = QLabel()
-        new_vault_label.setText('Création du coffre fort')
+        new_vault_label.setText('Création du coffre-fort')
         new_vault_label.setStyleSheet('color: grey')
 
         # ═══════════---> enter_vault_name_label
 
         enter_vault_name_label = QLabel()
-        enter_vault_name_label.setText('Nom du coffre fort')
+        enter_vault_name_label.setText('Nom du coffre-fort')
         enter_vault_name_label.setObjectName('m_label')
 
         # ═══════════---> vault_name_text_box : Champ pour la saisie du nom de coffre
@@ -625,7 +622,7 @@ class zPass(QMainWindow):
         self.main_entries_view_layout.addLayout(self.gap_2_column)
         self.main_entries_view_layout.addLayout(self.password_column)
 
-        # ═══════════---> right_panel_root, right_panel_root_layout & right_panel_container : Affichage de l'entrée séléctionnée
+        # ═══════════---> right_panel_root, right_panel_root_layout & right_panel_container : Affichage de l'entrée sélectionnée
 
         right_panel_root = QWidget()
         right_panel_root.setMinimumWidth(50)
@@ -671,79 +668,91 @@ class zPass(QMainWindow):
         global selected_vault
 
         # encrypt_state / decrypt_state / delete_vault_state / new_vault_state / new_entry_state / modify_entry_state / remove_entry_state
-        self.toggle_actions(True, False, False, False, True, True, True)
+        self.toggle_actions(True, False, False, False, True, True, True) # On active / désactive les actions
 
-        self.new_vault_creation_root.setHidden(True)
+        self.new_vault_creation_root.setHidden(True) # On cache tous les contenants sauf "decrypt_vault_root"
         self.decrypt_vault_root.setHidden(False)
         self.entries_splitter_root.setHidden(True)
 
         vault_list = self.list_available_vaults()
-        selected_vault = vault_list[0]
+        selected_vault = vault_list[0] # On réinitialise le coffre-fort sélectionné
         self.vault_selection_dropdown.setCurrentIndex(0)
 
-        self.master_password_text_box.clear()
-        self.master_password_text_box.setStyleSheet('')
-        self.wrong_master_password_label.setStyleSheet('color: transparent')
-        self.show_master_password_button.setIcon(QIcon('./themes/light/visibility_off.png'))
-        self.show_master_password_button.setChecked(False)
-        self.vault_code_text_box.clear()
-        self.vault_code_text_box.setStyleSheet('')
-        self.wrong_vault_code_label.setStyleSheet('color: transparent')
-        self.show_vault_code_button.setIcon(QIcon('./themes/light/visibility_off.png'))
-        self.show_vault_code_button.setChecked(False)
-
-        self.master_password_text_box.setEchoMode(QLineEdit.Password)
-        self.vault_code_text_box.setEchoMode(QLineEdit.Password)
+        self.reset_text_boxes() # On réinitialise les champs
 
     def show_vault_creation_ui(self):
         # encrypt_state / decrypt_state / delete_vault_state / new_vault_state / new_entry_state / modify_entry_state / remove_entry_state
-        self.toggle_actions(True, True, True, False, True, True, True)
+        self.toggle_actions(True, True, True, False, True, True, True) # On active / désactive les actions
 
-        self.new_vault_creation_root.setHidden(False)
+        self.new_vault_creation_root.setHidden(False) # On cache tous les contenants sauf "new_vault_creation_root"
         self.decrypt_vault_root.setHidden(True)
         self.entries_splitter_root.setHidden(True)
 
-        self.vault_name_text_box.clear()
-        self.vault_name_text_box.setStyleSheet('')
-        self.wrong_vault_name_label.setStyleSheet('color: transparent')
-        self.new_master_password_text_box.clear()
-        self.new_master_password_text_box.setStyleSheet('')
-        self.wrong_new_master_password_label.setStyleSheet('color: transparent')
-        self.show_new_master_password_button.setIcon(QIcon('./themes/light/visibility_off.png'))
-        self.show_new_master_password_button.setChecked(False)
-        self.new_vault_code_text_box.clear()
-        self.new_vault_code_text_box.setStyleSheet('')
-        self.wrong_new_vault_code_label.setStyleSheet('color: transparent')
-        self.show_new_vault_code_button.setIcon(QIcon('./themes/light/visibility_off.png'))
-        self.show_new_vault_code_button.setChecked(False)
-
-        self.new_master_password_text_box.setEchoMode(QLineEdit.Password)
-        self.new_vault_code_text_box.setEchoMode(QLineEdit.Password)
+        self.reset_text_boxes() # On réinitialise les champs
 
         if self.list_available_vaults() != []:
-            new_vault_cancel_button.setHidden(False)
+            new_vault_cancel_button.setHidden(False) # S'il y a déjà un coffre éxistant, on affiche le bouton annuler
         else:
             new_vault_cancel_button.setHidden(True)
-
-    def reset_text_boxes(self):
-        
 
     def show_passwords_ui(self):
         global selected_entry
 
         # encrypt_state / decrypt_state / delete_vault_state / new_vault_state / new_entry_state / modify_entry_state / remove_entry_state
-        self.toggle_actions(False, True, False, True, False, True, True)
+        self.toggle_actions(False, True, False, True, False, True, True) # On active / désactive les actions
 
-        self.new_vault_creation_root.setHidden(True)
+        self.new_vault_creation_root.setHidden(True) # On cache tous les contenants sauf "entries_splitter_root"
         self.decrypt_vault_root.setHidden(True)
         self.entries_splitter_root.setHidden(False)
 
-        selected_entry = None
+        selected_entry = None # On réinitialise l'index de l'entrée sélectionnée 
 
-        self.populate_entries()
+        self.populate_entries_view() # On affiche les entrées
+
+    def about_action(self):
+        self.create_dialog('zPass', f'zPass {version}\n© 2024 Ziad OUALHADJ (ziadOUA)') # À propos du programme
+
+    def reset_text_boxes(self):
+        # Cette fonction réinitialise tous les champs de saisie, ainsi que le texte qui indique toute erreur de saisie
+        self.master_password_text_box.clear() # On vide le champ de son contenu
+        self.master_password_text_box.setEchoMode(QLineEdit.Password) # On remet le mode d'affichage "mot de passe"
+
+        self.wrong_master_password_label.setStyleSheet('color: transparent') # On rend le texte transparent
+
+        self.show_master_password_button.setIcon(QIcon('./themes/light/visibility_off.png')) # On réinitialise l'icône
+        self.show_master_password_button.setChecked(False) # On réinitialise l'état du bouton
+
+        # Idem pour le restant des déclarations
+        self.vault_code_text_box.clear()
+        self.vault_code_text_box.setEchoMode(QLineEdit.Password)
+
+        self.wrong_vault_code_label.setStyleSheet('color: transparent')
+
+        self.show_vault_code_button.setIcon(QIcon('./themes/light/visibility_off.png'))
+        self.show_vault_code_button.setChecked(False)
+
+        self.vault_name_text_box.clear()
+
+        self.wrong_vault_name_label.setStyleSheet('color: transparent')
+
+        self.new_master_password_text_box.clear()
+        self.new_master_password_text_box.setEchoMode(QLineEdit.Password)
+
+        self.wrong_new_master_password_label.setStyleSheet('color: transparent')
+
+        self.show_new_master_password_button.setIcon(QIcon('./themes/light/visibility_off.png'))
+        self.show_new_master_password_button.setChecked(False)
+
+        self.new_vault_code_text_box.clear()
+        self.new_vault_code_text_box.setEchoMode(QLineEdit.Password)
+
+        self.wrong_new_vault_code_label.setStyleSheet('color: transparent')
+
+        self.show_new_vault_code_button.setIcon(QIcon('./themes/light/visibility_off.png'))
+        self.show_new_vault_code_button.setChecked(False)
     
     def toggle_actions(self, encrypt_state, decrypt_state, delete_vault_state, new_vault_state, new_entry_state, modify_entry_state, remove_entry_state):
-        encrypt_action.setDisabled(encrypt_state)
+        encrypt_action.setDisabled(encrypt_state) # On change l'état de chaque action, entre activé & désactivé
         decrypt_action.setDisabled(decrypt_state)
         delete_vault_action.setDisabled(delete_vault_state)
         new_vault_action.setDisabled(new_vault_state)
@@ -752,154 +761,253 @@ class zPass(QMainWindow):
         modify_entry_action.setDisabled(modify_entry_state)
         remove_entry_action.setDisabled(remove_entry_state)
 
-    def list_available_vaults(self) -> list:
+    def list_available_vaults(self) -> list: # Simple fonction retournant une liste des coffres éxistants
         vault_list = []
         for vault in settings['vaults']:
-            vault_list.append(vault)
+            vault_list.append(vault) # On récupère l'ensemble des clefs contenues dans "settings"
         
         return vault_list
 
-    def get_selected_vault_name(self, s): # Simple fonction qui met à jour le coffre sélectionné par l'utilisateur
+    def get_selected_vault_name(self, index): # Simple fonction qui met à jour le coffre sélectionné par l'utilisateur
         global selected_vault
-
-        selected_vault = s
+        selected_vault = index
     
     def check_vault_code_validity(self, text_box:QLineEdit, label_wrong:QLabel) -> bool:
-        valid = True
+        valid = True # Drapeau de validité de la saisie
 
-        label_wrong.setStyleSheet('color: transparent')
+        label_wrong.setStyleSheet('color: transparent') # On rend le texte transparent, tant qu'aucune erreur n'est à signaler
         
-        try:
-            if len(text_box.text()) != 6: 
-                int(text_box.text())
+        try: # On essaiera de convertir la saisie de l'utilisateur avec int()
+            int(text_box.text()) # On convertit la saisie, de str() vers int()
+            if len(text_box.text()) != 6: # Si la longueur du code d'authentification n'est pas égale à 6
                 valid = False
-                label_wrong.setStyleSheet('')
-                label_wrong.setText('Le code contient 6 chiffres')
-        except ValueError:
+                label_wrong.setStyleSheet('') # Le texte redevient rouge
+                label_wrong.setText('Le code contient 6 chiffres') # Message d'erreur affiché à l'utilisateur
+        except ValueError: # Erreur à la conversion : le code d'authentification contient autre chose que des chiffres
             valid = False
             label_wrong.setStyleSheet('')
-            label_wrong.setText('Le code ne contient que des chiffres')
-        
-        if valid:
-            text_box.setStyleSheet('')
-            label_wrong.setStyleSheet('color: transparent;')
-        return valid
-    
-    def check_master_password_validity(self, text_box:QLineEdit, label_wrong:QLabel) -> bool:
-        valid = True
-        
-        label_wrong.setStyleSheet('color: transparent')
-
-        if len(text_box.text()) == 0:
-            valid = False
-            label_wrong.setStyleSheet('')
-            label_wrong.setText('Saisissez un mot de passe')
+            label_wrong.setText('Ne saisissez que des caractères numériques')
         
         if valid:
             label_wrong.setStyleSheet('color: transparent')
-        return valid
+        return valid # On retourne la validité de la saisie
+    
+    def check_master_password_validity(self, text_box:QLineEdit, label_wrong:QLabel) -> bool:
+        valid = True # Drapeau de validité de la saisie
+        
+        label_wrong.setStyleSheet('color: transparent') # On rend le texte transparent, tant qu'aucune erreur n'est à signaler
+
+        if len(text_box.text()) == 0: # Si la longueur du mot de passe est égale 0
+            valid = False
+            label_wrong.setStyleSheet('') # Le texte redevient rouge
+            label_wrong.setText('Saisissez un mot de passe') # Message d'erreur affiché à l'utilisateur
+        
+        if valid:
+            label_wrong.setStyleSheet('color: transparent')
+        return valid # On retourne la validité de la saisie
     
     def check_vault_name_validity(self) -> bool:
-        valid = True
-        self.wrong_vault_name_label.setStyleSheet('color: transparent')
-        possible_new_vault_name = self.vault_name_text_box.text() # On récupère le contenu du champ "possible_new_vault_name"
-        # Pas idéal : Permet d'acccepter les accents, mais permet aussi d'avoir des noms de coffre comme "Super coffre 🧰"
-        forbidden_characters = list(string.punctuation + string.whitespace) 
-        forbidden_characters.remove(' ') # L'espace est retiré de la liste des charactères interdits
+        valid = True # Drapeau de validité de la saisie
         
-        # On vérifie si le nom éxiste déjà
-        if possible_new_vault_name in settings['vaults']:
+        self.wrong_vault_name_label.setStyleSheet('color: transparent')
+        possible_new_vault_name = self.vault_name_text_box.text() # On récupère le contenu du champ "vault_name_text_box"
+        forbidden_characters = list(string.punctuation + string.whitespace) # On crée une liste de caractères interdits
+        # Pas idéal : permet d'accepter les accents, mais permet aussi d'autres caractères comme les émojis (exemple : 🧰)
+        forbidden_characters.remove(' ') # L'espace est retiré de la liste des caractères interdits
+        
+        if possible_new_vault_name in settings['vaults']: # On vérifie si le nom existe déjà
             valid = False
+            self.wrong_vault_name_label.setStyleSheet('')
             self.wrong_vault_name_label.setText('Nom de coffre déjà existant')
-            self.wrong_vault_name_label.setStyleSheet('')
-        # On vérifie que la longueur du nom ne soi pas de zéro. On vérifie aussi qu'elle soit inférieure à 32¹.
-        elif len(possible_new_vault_name) == 0 or len(possible_new_vault_name) >= 32:
+        elif len(possible_new_vault_name) == 0: # On vérifie que la longueur du nom ne soit pas égale à zéro
             valid = False
-            self.wrong_vault_name_label.setText('La longueur du nom de coffre doit être comprise entre 0 et 32')
             self.wrong_vault_name_label.setStyleSheet('')
+            self.wrong_vault_name_label.setText('Saisissez un nom de coffre')
+        elif len(possible_new_vault_name) >= 32: # On vérifie aussi qu'elle soit inférieure à 32 (cf 5.1.)
+            valid = False
+            self.wrong_vault_name_label.setStyleSheet('')
+            self.wrong_vault_name_label.setText('Nom de coffre trop long')
         else:
-            for character in possible_new_vault_name: # On réalise une boucle sur l'ensemble des charactères du nouveau nom
-                if character in forbidden_characters: # On teste si le charactère est dans la liste des charactères interdits
+            for character in possible_new_vault_name: # On réalise une boucle sur l'ensemble des caractères du nouveau nom
+                if character in forbidden_characters: # On teste si le caractère est dans la liste des caractères interdits
                     valid = False
-                    self.wrong_vault_name_label.setText('Seuls les caractères alphanumériques sont autorisés')
                     self.wrong_vault_name_label.setStyleSheet('')
+                    self.wrong_vault_name_label.setText('Seuls les caractères alphanumériques sont autorisés')
+                    break # On sort de la boucle, car il n'est pas nécessaire de passer sur tous les caractères
+        return valid # On retourne la validité de la saisie
 
-        return valid
+    def check_new_entry_name_validity(self):
+        possible_new_entry_name = self.new_entry_name_text_box.text() # On récupère le contenu du champ "new_entry_name_text_box"
+        
+        # On vérifie que la longueur du nom n'est pas égale à zéro et qu'il n'existe pas déjà dans passwords['entries']
+        if len(possible_new_entry_name) == 0 or possible_new_entry_name in passwords['entries']:
+            return False # La saisie n'est pas valide
+        return True # La saisie est valide
 
-    def closeEvent(self, event): # Lorsque le bouton de sortie est cliqué
-        master_password = pad_master_password(self.master_password_text_box.text()) # On récupère le mot de passe principal depuis le champ correspondant
-        vault_code = bytes(self.vault_code_text_box.text(), 'utf-8') # On récupère le code depuis le champ correspondant
+    def check_modified_entry_name_validity(self):
+        valid = True # Drapeau de validité de la saisie
 
-        close = QMessageBox()
-        close.setWindowTitle('Quitter ?')
-        close.setWindowIcon(QIcon('./themes/logo_64.png'))
-        close.setText('Fermer zPass ?')
-        close.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        close = close.exec()
+        possible_modified_entry_name = self.modify_entry_name_text_box.text() # On récupère le texte du champ
+        
+        if selected_entry != None:
+            passwords_keys = [i for i in passwords['entries']] # On récupère une liste des noms des entrées
+        
+            # On vérifie que la longueur du nom n'est pas égale à 0 et qu'il n'existe pas déjà une entrée avec le même nom...
+            if len(possible_modified_entry_name) == 0 or possible_modified_entry_name in passwords['entries']:
+                valid = False
+                if possible_modified_entry_name == passwords_keys[selected_entry]: #...sauf si le nom est le même que l'ancien
+                    valid = True
+            return valid # On retourne la validité de la saisie
+        return False # Le programme n'est pas censé exécuter cette ligne, cas de dernier recours pour éviter les erreurs 
 
-        if last_correct_master_password != '':
-            encrypt_vault(selected_vault, master_password, vault_code) # On essaie de chiffrer le coffre dès la sortie, pour plus de sécurité
-
-        if close == QMessageBox.Yes:
-            event.accept()
-        else:
-            event.ignore()
+    def closeEvent(self, event): # Lorsque le bouton de fermeture du programme est cliqué, fonction Qt standard
+        if not self.exit_zPass():
+            event.ignore() # On ignore l'évènement si False est retourné par la fonction "exit_zPass"
     
-    def exit_zPass(self):
-        master_password = pad_master_password(self.master_password_text_box.text()) # On récupère le mot de passe principal depuis le champ correspondant
-        vault_code = bytes(self.vault_code_text_box.text(), 'utf-8') # On récupère le code depuis le champ correspondant
+    def exit_zPass(self): # Fonction définissant la procédure de fermeture du programme
+        master_password = pad_master_password(self.master_password_text_box.text()) # On récupère le mot de passe principal
+        vault_code = bytes(self.vault_code_text_box.text(), 'utf-8') # On récupère le code d'authentification
 
-        close = QMessageBox()
-        close.setWindowTitle('Quitter ?')
-        close.setWindowIcon(QIcon('./themes/logo_64.png'))
-        close.setText('Fermer zPass ?')
-        close.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        close = close.exec()
-
-        if last_correct_master_password != '':
-            encrypt_vault(selected_vault, master_password, vault_code) # On essaie de chiffrer le coffre dès la sortie, pour plus de sécurité
+        close_dialog = QMessageBox() # On crée un dialogue pour indiquer à l'utilisateur que le programme va être fermé
+        close_dialog.setWindowIcon(QIcon('./themes/logo_64.png')) # Icône du dialogue
+        close_dialog.setWindowTitle('Quitter ?') # Titre du dialogue
+        close_dialog.setText('Fermer zPass ?') # Texte du dialogue
+        close_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No) # Boutons du dialogue (Oui | Non)
+        close = close_dialog.exec() # On exécute le dialogue, tout en récupérant quel bouton a été cliqué
 
         if close == QMessageBox.Yes:
-            sys.exit()
-        else:
-            pass
+            if last_correct_master_password != '': # Si la variable est vide, alors aucun coffre n'a été déchiffré
+                # On essaie de chiffrer le coffre dès la sortie, pour plus de sécurité
+                encrypt_vault(selected_vault, master_password, vault_code)
+            sys.exit() # Fermeture du programme
+        return False # Indiquera à la fonction exit_zPass que l'utilisateur a cliqué sur "Non"
+
+    def encrypt_button_clicked(self):
+        if last_correct_master_password == '': # Si la variable est vide, alors aucun coffre n'a été déchiffré
+            # On récupère le mot de passe principal et le code d'authentification
+            self.master_password = pad_master_password(self.master_password_text_box.text())
+            self.vault_code = bytes(self.vault_code_text_box.text(), 'utf-8')
+        else: # Sinon, les identifiants correspondent aux derniers identifiants corrects utilisés
+            self.master_password = last_correct_master_password
+            self.vault_code = last_correct_vault_code
+
+        # On essaie de chiffrer le coffre tout en récupérant le code d'erreur
+        encrypt_status = encrypt_vault(selected_vault, self.master_password, self.vault_code)
+
+        if encrypt_status != 200: # L'opération n'a pas abouti : une erreur empêche le chiffrement
+            dialog = QMessageBox(self) # On crée un dialogue contenant l'erreur en question
+            dialog.setWindowIcon(QIcon('./themes/logo_64.png')) # Icône du dialogue
+            dialog.setWindowTitle(error_codes_dictionary[encrypt_status][0]) # Titre du dialogue
+            dialog.setText(f'{encrypt_status} : {error_codes_dictionary[encrypt_status][1]}') # Texte du dialogue
+            dialog.setStandardButtons(QMessageBox.Ok) # Bouton "Ok" du dialogue
+            dialog.exec()
+        else: # L'opération a abouti sans problème, on continue l'exécution du programme
+            self.show_vault_decrypt_ui()
 
     def decrypt_button_clicked(self):
         global last_correct_vault_code, last_correct_master_password
 
+        # On récupère la validité des identifiants
         is_master_password_valid = self.check_master_password_validity(self.master_password_text_box, self.wrong_master_password_label)
         is_vault_code_valid = self.check_vault_code_validity(self.vault_code_text_box, self.wrong_vault_code_label)
 
-        if is_master_password_valid and is_vault_code_valid:
+        if is_master_password_valid and is_vault_code_valid: # Si les identifiants sont valides
+            # On convertit les identifiants en bytes() de format adapté
             self.master_password = pad_master_password(self.master_password_text_box.text())
             self.vault_code = bytes(self.vault_code_text_box.text(), 'utf-8')
 
-            decrypt_status = decrypt_vault(selected_vault, self.master_password, self.vault_code) # On exécute la fonction qui essaie de déchiffrer le coffre, tout en récupérant le code d'erreur reçu dans la variable "decrypt_status"
+            # On essaie de déchiffrer le coffre tout en récupérant le code d'erreur
+            decrypt_status = decrypt_vault(selected_vault, self.master_password, self.vault_code)
             
-            # On indique à l'utilisateur que le mot de passe est / code d'authentification est invalide
-            if decrypt_status == 400:
+            # On indique à l'utilisateur que le mot de passe / code d'authentification est invalide
+            if decrypt_status == 400: # Le mot de passe n'est pas correct
                 time.sleep(0.5) # On force une attente de 500 ms pour éviter des tentatives par "force brute"
                 self.wrong_master_password_label.setStyleSheet('')
                 self.wrong_master_password_label.setText('Mot de passe invalide')
                 self.wrong_vault_code_label.setStyleSheet('color: transparent')
-            elif decrypt_status == 401:
+            elif decrypt_status == 401: # Le code l'authentification n'est pas correct
                 time.sleep(0.5)
                 self.wrong_master_password_label.setStyleSheet('color: transparent')
                 self.wrong_vault_code_label.setStyleSheet('')
                 self.wrong_vault_code_label.setText('Code de coffre invalide')
-            elif decrypt_status == 200:
+            elif decrypt_status == 200: # Les identifiants sont corrects
                 last_correct_master_password = self.master_password
                 last_correct_vault_code = self.vault_code
                 self.wrong_master_password_label.setStyleSheet('color: transparent')
                 self.wrong_vault_code_label.setStyleSheet('color: transparent')
                 self.show_passwords_ui()
+
+    def create_new_vault_button_clicked(self):
+        global selected_vault
+
+        is_master_password_valid = self.check_master_password_validity(self.new_master_password_text_box, self.wrong_new_master_password_label)
+        is_vault_code_valid = self.check_vault_code_validity(self.new_vault_code_text_box, self.wrong_new_vault_code_label)
+        is_vault_name_valid = self.check_vault_name_validity()
+
+        if is_master_password_valid and is_vault_code_valid and is_vault_name_valid:
+            vault_name = self.vault_name_text_box.text()
+            create_vault_status = create_vault(vault_name)
+
+            if create_vault_status == 200:
+                selected_vault = vault_name
+                new_vault_object =  {vault_name: {
+                                            "file_path": f'vaults/{vault_name}.zpdb'
+                                        }
+                                    }
+
+                settings['vaults'].update(new_vault_object)
+                settings_json = json.dumps(settings, indent=4, sort_keys=True)
+                with open('settings.json', 'w') as settings_file:
+                    settings_file.write(settings_json)
+                
+                self.vault_selection_dropdown.addItem(selected_vault)
+                
+                new_master_password = pad_master_password(self.new_master_password_text_box.text())
+                new_vault_code = bytes(self.new_vault_code_text_box.text(), 'utf-8')
+                
+                encrypt_vault(selected_vault, new_master_password, new_vault_code)
+                
+                self.show_vault_decrypt_ui()
     
+    def delete_vault_button_clicked(self):
+        dialog = QMessageBox(self)
+        dialog.setWindowIcon(QIcon('./themes/logo_64.png'))
+        dialog.setWindowTitle('Supprimer ?')
+        dialog.setText('Voulez-vous supprimer le coffre-fort ?')
+        dialog.setIcon(QMessageBox.Warning)
+        dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+
+        choice = dialog.exec()
+
+        if choice == QMessageBox.Yes:
+            delete_vault(selected_vault) # On supprime le coffre
+            selected_vault_index = 0
+            
+            for vault in settings['vaults']:
+                if vault == selected_vault:
+                    break
+                else:
+                    selected_vault_index += 1
+
+            del settings['vaults'][selected_vault]
+            settings_json = json.dumps(settings, indent=4, sort_keys=True)
+            with open('settings.json', 'w') as settings_file:
+                settings_file.write(settings_json)
+                settings_file.close()
+
+            self.vault_selection_dropdown.removeItem(selected_vault_index)
+
+            if self.list_available_vaults() == []:
+                self.show_vault_creation_ui()
+            else:
+                self.show_vault_decrypt_ui()
+
     def get_passwords(self) -> dict:
         with open('.temp_vault.zpdb', 'r') as password_file: # Ouverture initiale du fichier paramètres (nommé settings.json)
             passwords = json.load(password_file) # On récupère les données du fichier
         return passwords
     
-    def populate_entries(self):
+    def populate_entries_view(self):
         global passwords
 
         entries_view = self.get_entries_view_colum_lists()
@@ -946,7 +1054,7 @@ class zPass(QMainWindow):
                 icon_path = passwords['entries'][entry]['icon_path']
                 if icon_path == '':
                     icon_path = './themes/light/no_icon.png'
-                username = passwords['entries'][entry]['user_name']
+                username = passwords['entries'][entry]['username']
                 password = passwords['entries'][entry]['password']
 
                 icon_container = QLabel()
@@ -983,9 +1091,9 @@ class zPass(QMainWindow):
                 self.password_column.addWidget(password_label)
 
                 for widget in [icon_container, name_label, gap_1, username_label, gap_2, password_label]:
-                    widget.enterEvent = lambda *args, arg=icon_container: self.hovered_entry(arg)
-                    widget.leaveEvent = lambda *args, arg=icon_container: self.unhovered_entry(arg)
-                    widget.mousePressEvent = lambda *args, arg=icon_container, arg2=passwords['entries'][entry]: self.clicked_entry(arg, arg2)
+                    widget.enterEvent = lambda *args, arg=icon_container: self.hover_entry(arg)
+                    widget.leaveEvent = lambda *args, arg=icon_container: self.unhover_entry(arg)
+                    widget.mousePressEvent = lambda *args, arg=icon_container, arg2=passwords['entries'][entry]: self.select_entry(arg, arg2)
 
                 icon_container.setStyleSheet('padding: 0 0 0 4px; background-color: transparent')
                 name_label.setStyleSheet('background-color: transparent')
@@ -1014,7 +1122,7 @@ class zPass(QMainWindow):
         self.gap_2_column.addWidget(gap_2_spacer, 1)
         self.password_column.addWidget(password_spacer, 1)
     
-    def clicked_entry(self, element, entry_data):
+    def select_entry(self, element, entry_data):
         global selected_entry
         global selected_entry_password, selected_entry_hidden_password
         global selected_entry_password_label
@@ -1056,7 +1164,7 @@ class zPass(QMainWindow):
             icon_path = './themes/light/no_icon_dp.png'
         entry_name = entry_data['name']
         password = entry_data['password']
-        username = entry_data['user_name']
+        username = entry_data['username']
 
         selected_entry_icon_container = QLabel()
         selected_entry_icon_container.setFixedSize(QSize(128, 128))
@@ -1091,7 +1199,7 @@ class zPass(QMainWindow):
         selected_entry_username_label_container.setLayout(selected_entry_username_label_layout)
 
         selected_entry_username_label = QLabel()
-        selected_entry_username_label.setText(entry_data['user_name'])
+        selected_entry_username_label.setText(entry_data['username'])
         selected_entry_username_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
         selected_entry_username_label.setCursor(Qt.IBeamCursor)
 
@@ -1323,7 +1431,7 @@ class zPass(QMainWindow):
                 modified_icon_path = './themes/light/no_icon_dp.png'
             old_entry_name = entry_data['name']
             password = entry_data['password']
-            username = entry_data['user_name']
+            username = entry_data['username']
 
             self.modified_icon_container = QLabel()
             self.modified_icon_container.setFixedSize(QSize(128, 128))
@@ -1359,7 +1467,7 @@ class zPass(QMainWindow):
             
             self.modify_entry_name_text_box = QLineEdit()
             self.modify_entry_name_text_box.setFixedHeight(28)
-            self.modify_entry_name_text_box.textChanged.connect(self.check_modified_entry_name)
+            self.modify_entry_name_text_box.textChanged.connect(self.check_modified_entry_name_validity)
             self.modify_entry_name_text_box.setText(old_entry_name)
 
             new_entry_username_title_label = QLabel()
@@ -1400,10 +1508,10 @@ class zPass(QMainWindow):
             actions_container.setLayout(actions_layout)
 
             save_modifications_button = QPushButton('Sauvegarder')
-            save_modifications_button.clicked.connect(self.save_modifications_button_clicked)
+            save_modifications_button.clicked.connect(self.save_entry_modifications_button_clicked)
 
             cancel_modification_button = QPushButton('Annuler')
-            cancel_modification_button.clicked.connect(self.cancel_modification_button_clicked)
+            cancel_modification_button.clicked.connect(self.cancel_entry_modification_button_clicked)
             cancel_modification_button.setObjectName('red_button')
 
             actions_layout.addWidget(QWidget(), 1)
@@ -1421,8 +1529,8 @@ class zPass(QMainWindow):
             self.main_right_panel_layout.addWidget(actions_container)
             self.main_right_panel_layout.addWidget(QWidget(), 1)
 
-    def save_modifications_button_clicked(self):
-        if self.check_modified_entry_name():
+    def save_entry_modifications_button_clicked(self):
+        if self.check_modified_entry_name_validity():
             del passwords['entries'][old_entry_name]
 
             modified_entry_name = self.modify_entry_name_text_box.text()
@@ -1433,7 +1541,7 @@ class zPass(QMainWindow):
             new_entry_object =  {modified_entry_name: {
                                         'name': modified_entry_name,
                                         'icon_path': modified_entry_icon_path,
-                                        "user_name": modified_entry_username,
+                                        "username": modified_entry_username,
                                         "password": modified_entry_password
                                     }
                                 }
@@ -1444,11 +1552,11 @@ class zPass(QMainWindow):
                 passwords_file.write(passwords_json)
             
             self.deselect_entry()
-            self.populate_entries()
+            self.populate_entries_view()
             passwords_keys = [i for i in passwords['entries']]
             selected_entry = passwords_keys.index(modified_entry_name)
             entry_data = passwords['entries'][passwords_keys[selected_entry]]
-            self.clicked_entry(self.get_entries_view_colum_lists()['icon_column'][selected_entry], entry_data)
+            self.select_entry(self.get_entries_view_colum_lists()['icon_column'][selected_entry], entry_data)
     
     def cancel_entry_creation_button_clicked(self):
         global selected_entry
@@ -1461,13 +1569,13 @@ class zPass(QMainWindow):
         remove_entry_action.setDisabled(True)
         modify_entry_action.setDisabled(True)
 
-    def cancel_modification_button_clicked(self):
+    def cancel_entry_modification_button_clicked(self):
         if selected_entry != None:
             self.clear_right_panel()
             passwords_keys = [i for i in passwords['entries']] #!
             entry_data = passwords['entries'][passwords_keys[selected_entry]]
 
-            self.clicked_entry(self.get_entries_view_colum_lists()['icon_column'][selected_entry], entry_data)
+            self.select_entry(self.get_entries_view_colum_lists()['icon_column'][selected_entry], entry_data)
     
     def clear_modified_entry_icon_button_clicked(self):
         global modified_icon_path
@@ -1501,7 +1609,7 @@ class zPass(QMainWindow):
             new_entry_object =  {new_entry_name: {
                                         'name': new_entry_name,
                                         'icon_path': new_entry_icon_path,
-                                        "user_name": new_entry_username,
+                                        "username": new_entry_username,
                                         "password": new_entry_password
                                     }
                                 }
@@ -1512,7 +1620,7 @@ class zPass(QMainWindow):
                 passwords_file.write(passwords_json)
             
             self.deselect_entry()
-            self.populate_entries()
+            self.populate_entries_view()
 
             new_entry_action.setDisabled(False)
 
@@ -1526,32 +1634,7 @@ class zPass(QMainWindow):
                 passwords_file.write(passwords_json)
 
             self.deselect_entry()
-            self.populate_entries()
-    
-    def check_new_entry_name_validity(self):
-        valid = True
-        
-        possible_new_entry_name = self.new_entry_name_text_box.text()
-        
-        if len(possible_new_entry_name) == 0 or possible_new_entry_name in passwords['entries']:
-            valid = False
-
-        return valid
-
-    def check_modified_entry_name(self):
-        valid = True
-
-        possible_modified_entry_name = self.modify_entry_name_text_box.text()
-        
-        if selected_entry != None:
-            passwords_keys = [i for i in passwords['entries']]
-        
-            if len(possible_modified_entry_name) == 0 or possible_modified_entry_name in passwords['entries']:
-                valid = False
-                if possible_modified_entry_name == passwords_keys[selected_entry]:
-                    valid = True
-
-            return valid
+            self.populate_entries_view()
 
     def selected_entry_show_password_button_clicked(self):
         global is_selected_entry_password_visible
@@ -1569,7 +1652,7 @@ class zPass(QMainWindow):
         clipboard = QClipboard()
         clipboard.setText(selected_entry_password)
     
-    def hovered_entry(self, element):
+    def hover_entry(self, element):
         entries_view = self.get_entries_view_colum_lists()
 
         if element in entries_view['icon_column']:
@@ -1593,7 +1676,7 @@ class zPass(QMainWindow):
             'password_column': [self.password_column.itemAt(i).widget() for i in range(self.password_column.count())]
         }
 
-    def unhovered_entry(self, element):
+    def unhover_entry(self, element):
         entries_view = self.get_entries_view_colum_lists()
 
         if element in entries_view['icon_column']:
@@ -1606,98 +1689,8 @@ class zPass(QMainWindow):
             entries_view['username_column'][entry_index].setStyleSheet('background-color: transparent')
             entries_view['gap_2_column'][entry_index].setStyleSheet('background-color: transparent')
             entries_view['password_column'][entry_index].setStyleSheet('background-color: transparent')
-    
-    def encrypt_button_clicked(self):
-        if last_correct_master_password == '':
-            self.master_password = pad_master_password(self.master_password_text_box.text())
-            self.vault_code = bytes(self.vault_code_text_box.text(), 'utf-8')
-        else:
-            self.master_password = last_correct_master_password
-            self.vault_code = last_correct_vault_code
 
-        encrypt_status = encrypt_vault(selected_vault, self.master_password, self.vault_code)
-
-        if encrypt_status != 200:
-            dialog = QMessageBox(self)
-            dialog.setWindowIcon(QIcon('./themes/logo_64.png'))
-            dialog.setWindowTitle(error_codes_dictionnary[encrypt_status][0])
-            dialog.setText(error_codes_dictionnary[encrypt_status][1])
-            dialog.setStandardButtons(QMessageBox.Ok)
-            if encrypt_status == 402:
-                dialog.setIcon(QMessageBox.Critical)
-                dialog.exec()
-            
-        else:
-            encrypt_action.setDisabled(True)
-            decrypt_action.setDisabled(False)
-            self.show_vault_decrypt_ui()
-    
-    def create_new_vault_button_clicked(self):
-        global selected_vault
-
-        is_master_password_valid = self.check_master_password_validity(self.new_master_password_text_box, self.wrong_new_master_password_label)
-        is_vault_code_valid = self.check_vault_code_validity(self.new_vault_code_text_box, self.wrong_new_vault_code_label)
-        is_vault_name_valid = self.check_vault_name_validity()
-
-        if is_master_password_valid and is_vault_code_valid and is_vault_name_valid:
-            vault_name = self.vault_name_text_box.text()
-            create_vault_status = create_vault(vault_name)
-
-            if create_vault_status == 200:
-                selected_vault = vault_name
-                new_vault_object =  {vault_name: {
-                                            "file_path": f'vaults/{vault_name}.zpdb'
-                                        }
-                                    }
-
-                settings['vaults'].update(new_vault_object)
-                settings_json = json.dumps(settings, indent=4, sort_keys=True)
-                with open('settings.json', 'w') as settings_file:
-                    settings_file.write(settings_json)
-                
-                self.vault_selection_dropdown.addItem(selected_vault)
-                
-                new_master_password = pad_master_password(self.new_master_password_text_box.text())
-                new_vault_code = bytes(self.new_vault_code_text_box.text(), 'utf-8')
-                
-                encrypt_vault(selected_vault, new_master_password, new_vault_code)
-                
-                self.show_vault_decrypt_ui()
-    
-    def delete_vault_button_clicked(self):
-        dialog = QMessageBox(self)
-        dialog.setWindowIcon(QIcon('./themes/logo_64.png'))
-        dialog.setWindowTitle('Supprimer ?')
-        dialog.setText('Voulez-vous supprimer le coffre fort ?')
-        dialog.setIcon(QMessageBox.Warning)
-        dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-
-        choice = dialog.exec()
-
-        if choice == QMessageBox.Yes:
-            delete_vault(selected_vault) # On supprime le coffre
-            selected_vault_index = 0
-            
-            for vault in settings['vaults']:
-                if vault == selected_vault:
-                    break
-                else:
-                    selected_vault_index += 1
-
-            del settings['vaults'][selected_vault]
-            settings_json = json.dumps(settings, indent=4, sort_keys=True)
-            with open('settings.json', 'w') as settings_file:
-                settings_file.write(settings_json)
-                settings_file.close()
-
-            self.vault_selection_dropdown.removeItem(selected_vault_index)
-
-            if self.list_available_vaults() == []:
-                self.show_vault_creation_ui()
-            else:
-                self.show_vault_decrypt_ui()
-    
-    def create_dialog(self, title, content): # Petite fonction ayant pour but de créer de simple boîtes de dialogue
+    def create_dialog(self, title, content): # Petite fonction ayant pour but de créer de simples boîtes de dialogue
         dialog = QMessageBox(self)
         dialog.setWindowIcon(QIcon('./themes/logo_64.png'))
         dialog.setWindowTitle(title)
@@ -1734,11 +1727,11 @@ class zPass(QMainWindow):
         except FileNotFoundError:
             pass # Le fichier n'existe pas, continuer l'exécution normale du programme
 
-        try: os.mkdir('./vaults/'); # On vérifie si le dossier "vaults" éxiste
-        except FileExistsError: pass; # Le dossier éxiste déjà, continuer
+        try: os.mkdir('./vaults/'); # On vérifie si le dossier "vaults" existe
+        except FileExistsError: pass; # Le dossier existe déjà, continuer
         
-        try: os.mkdir('./icons/'); # On vérifie si le dossier "icons" éxiste
-        except FileExistsError: pass; # Le dossier éxiste déjà, continuer  
+        try: os.mkdir('./icons/'); # On vérifie si le dossier "icons" existe
+        except FileExistsError: pass; # Le dossier existe déjà, continuer  
 
 
 if __name__ == '__main__':
@@ -1755,8 +1748,3 @@ if __name__ == '__main__':
     splash_window.show()
 
     sys.exit(root.exec())
-
-# ¹ Il s'agit d'une limite arbitraire que je me suis permis d'instaurer. La raison est la suivante : la longueur maximale
-#   d'un chemin pour un fichier est définie par la clé de registre "MAX_PATH", et est limitée à 256. Cette limite de 32
-#   caractères pour le nom de tout nouveau coffre est là pour éviter tout problème s'y relatant. Dans le cas de Python,
-#   et de la fonction "open()", un chemin d'accès trop long génère une OSError [Errno 22] sur Windows.
