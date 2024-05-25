@@ -1,7 +1,7 @@
 """
 88  88  88           style.py
 88  ""  88           
-88      88           Collection de fonctions pour la gestion des bases de données
+88      88           Fonction servant à générer la feuille de style CSS qui sera appliquée au programme
 88  88  88,dPPYba,   
 88  88  88P'    "8a  Dépendants : main.py
 88  88  88       d8  Dépendances : Aucune dépendance
