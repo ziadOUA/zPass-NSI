@@ -1,9 +1,18 @@
-#   Les variables CSS standard (--variable: 10px) ne fonctionnent pas correctement avec Qt
-#   Il faut donc utiliser une méthode customisée
-#   Format d'une couleur avec le système de variables pour le fichier colors.txt :
-#       $md_sys_color_tertiary = rgb(58, 101, 111);
-#                 ^                       ^
-#         Nom de la variable     valeur de la variable
+"""
+88  88  88           style.py
+88  ""  88           
+88      88           Collection de fonctions pour la gestion des bases de données
+88  88  88,dPPYba,   
+88  88  88P'    "8a  Dépendants : main.py
+88  88  88       d8  Dépendances : Aucune dépendance
+88  88  88b,   ,a8"  
+88  88  8Y"Ybbd8"'   Notes : Les variables CSS standard (--variable: 10px) ne fonctionnent pas avec l'implémentation CSS de Qt,
+                             il nous faut donc utiliser une méthode customisée. L'implémentation sera la suivante :
+                             $variable = valeur;
+                             Exemple : $md_sys_color_tertiary = rgb(58, 101, 111);
+"""
+
+# ═════════════════════════════════ FONCTIONS ════════════════════════════════
 
 def get_style_sheet(path='./themes/style.css', dark_theme=False) -> str:
     stylesheet = open(path).read() # On lit le fichier CSS
