@@ -21,17 +21,17 @@ def get_style_sheet(path='./themes/style.css', dark_theme=False) -> str:
 
     colors = open(colors_path) # On ouvre le fichier contenant la palette de couleurs
     colors_list = [] # On initialise la liste "colors_list"
-    colors_dictionnary = dict() # On initialise le dictionnaire "colors_dictionnary"
+    colors_dictionary = dict() # On initialise le dictionnaire "colors_dictionary"
 
     for line in colors.readlines():
         colors_list.append(line.strip()) # On ajoute chaque ligne (sans saut de ligne) du fichier à la liste
 
     for color in colors_list:
         split_color = color.split(' = ') # On divise les variables de leurs valeurs
-        colors_dictionnary[split_color[0]] = split_color[1] # split_color[0] contient la variable, split_color[1] sa valeur
+        colors_dictionary[split_color[0]] = split_color[1] # split_color[0] contient la variable, split_color[1] sa valeur
 
-    for variable in colors_dictionnary:
+    for variable in colors_dictionary:
         # On cherche et remplace chaque variable dans le fichier CSS par la valeur définie
-        stylesheet = stylesheet.replace(f'{variable};', colors_dictionnary[variable]) 
+        stylesheet = stylesheet.replace(f'{variable};', colors_dictionary[variable]) 
     
     return stylesheet
