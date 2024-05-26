@@ -24,7 +24,7 @@ Le projet se nommera "zPass".
 Le choix du module a été guidé par le fait qu'un module utilisant la technologie Qt permettait de créer des interfaces flexibles et cohérentes entre les différentes plateformes (principalement Windows et Linux). De plus, Qt  a tendance à être beaucoup plus rapide et optimisé que Tkinter (Qt utilise le C++).<br>
 Deux options s'offrent à nous : le module [PyQt](https://www.riverbankcomputing.com/software/pyqt/) et [PySide](https://pypi.org/project/PySide/).<br>
 
-Les modules sont analogues, et partagent les mêmes fonctions (ou presque), ce qui rend la documentation facile à trouver. PySide a été choisi car le module est disponible uniquement sous licence LGPL, tandis que PyQt (appartenant à Riverbank Computing) est disponible soit sous licence GPLv3 soit sous leur propre licence commerciale (si le code source du programme concerné n'est pas mis à disposition).<br>
+Les modules sont analogues, et partagent les mêmes fonctions (ou presque), ce qui rend la documentation facile à trouver. PySide a été choisi car le module est disponible uniquement sous licence LGPL, tandis que PyQt (appartenant à Riverbank Computing) est disponible soit sous licence GPLv3, soit sous leur propre licence commerciale (si le code source du programme concerné n'est pas mis à disposition).<br>
 Un module comme PySide permet l'usage de propriétés CSS pour styliser les éléments graphiques.
 
 ## 1. Recherches initiales
@@ -49,7 +49,7 @@ Il s'agit de l'algorithme de chiffrement idéal, car il est "symétrique", il de
 
 ### 2.1. Base de données
 
-La base de données, appelée "coffre-fort" dans zPass, est un fichier .json chiffré avec la méthode décrite ci-dessus dont l'extension a été remplacée par ".zpdb", pour dissuader Windows de proposer un éditeur de texte pour ouvrir le fichier.<br>
+La base de données, appelée "coffre-fort" dans zPass, est un fichier .json chiffré avec la méthode décrite ci-dessus dont l'extension a été remplacée par ".zpdb" (zPass Database), pour dissuader Windows de proposer un éditeur de texte pour ouvrir le fichier.<br>
 ```json
 {
     "entries": { // Le dictionnaire "entries" contient toutes les entrées
@@ -114,11 +114,44 @@ Le fichier paramètres est un fichier JSON qui contient, outre des paramètres c
 
 ### 3.1. Menu de déchiffrement
 
+<img src="./res/affichage_déchiffrement.png">
+
 ### 3.2. Menu de création de base de données
+
+<img src="./res/affichage_nouveau_coffre-fort.png">
 
 ### 3.3. Menu d'affichage des entrées
 
+<img src="./res/affichage_des_entrées.png">
+
+À gauche : liste des entrées, à droite : informations sur l'entrée sélectionnée
+
+#### 3.3.1. Nouvelle entrée
+
+<img src="./res/affichage_nouvelle_entrée.png">
+
+#### 3.3.2. Modification d'une entrée existante
+
+<img src="./res/affichage_modification_entrée.png">
+
 ## 4. Bilan
+
+Ce projet est finalisé dans l'ensemble, et permet la création et la gestion de bases de données de mots de passe.
+
+### 4.1. Limitations
+
+Faute de temps, certaines fonctionnalités n'ont pas pu être implémentées :
+- **Le menu paramètres** : Le fichier paramètres `settings.json` est bien présent, et est utilisé pour stocker les chemins des différents coffres-forts, cependant, l'interface de changement des paramètres, située dans Outils > Paramètres n'a pas pu être ajoutée à temps.
+    - Par conséquent, le **mode sombre** ne peut pas être activé. Il reste en effet inachevé.
+- **Le générateur de mots de passe** : Ce menu aurait pu permettre de générer des mots de passe directement lors de la création d'une entrée.
+- **Accessibilité** : L'accessibilité du programme laisse à désirer. Il est possible de naviguer dans le programme en utilisant la touche *Tab*, cependant, aucun indice visuel n'est présent.
+    - Ceci est causé par la propriété CSS suivante : ` * {outline: none;}`. Il faudrait donc réimplémenter une façon de montrer qu'un bouton est en `:focus` qui corresponde au design général de zPass.
+
+### 4.2. Pistes supplémentaires
+
+- La façon dont les données déchiffrées sont gérées, grâce au fichier temporaire `.temp_vault.zpdb`, est loin d'être la meilleure manière de procéder : il s'agit en effet d'un risque de sécurité, car les mots de passe sont stockés, jusqu'à être chiffrés, en *plain text* (texte brut). De plus, le simple fait de supprimer ce fichier temporaire ne réduit en aucun cas les chances qu'un acteur malveillant récupère les mots de passe : un fichier supprimé n'est jamais vraiment effacé, et ce jusqu'à ce que d'autres données l'écrase.
+    - Il faudrait donc gérer le tout sans écrire quoique ce soit au disque dur. Utiliser un fichier temporaire à permis entre autres de vérifier que tout se passait bien.
+- Il serait intéressant de créer une version totalement dans la console de zPass, résiliente et fiable.
 
 ## 5. Notes supplémentaires
 
