@@ -1,23 +1,33 @@
+* {
+    outline: none; /* Permet d'enlever la bordure quand un élément est sélectionné */
+}
+
+/* QMainWindow : Fenêtre principale du programme */
+
 QMainWindow, QMessageBox {
     background-color: $md_sys_color_surface_container_low;
 }
 
-QToolBar {
-    border: none;
-}
-
-QToolBar::separator {
-    height: 1px;
-    margin: 4px;
-    width: 1px;
-    background-color: $md_sys_color_outline_variant;
-}
+/* QToolBar & #toolbar_background : Barre d'actions */
 
 #toolbar_background {
     background-color: $md_sys_color_surface_variant;
     border-radius: 20px;
     border: 0px;
 }
+
+QToolBar {
+    border: none;
+}
+
+QToolBar::separator { /* Séparateur de la barre d'actions */
+    height: 1px;
+    margin: 4px;
+    width: 1px;
+    background-color: $md_sys_color_outline_variant;
+}
+
+/* QToolButton : Bouton de la barre d'actions */
 
 QToolButton {
     height: 28px;
@@ -31,6 +41,8 @@ QToolButton:hover {
     background-color: $md_sys_color_primary_fixed;
 }
 
+/* QLineEdit : Champ de saisie */
+
 QLineEdit {
     border-top-right-radius: 14px;
     border-top-left-radius: 14px;
@@ -42,15 +54,17 @@ QLineEdit {
     padding: 0 0 0 8px;
 }
 
-QLineEdit:focus {
+QLineEdit:focus { /* Lorsque l'utilisateur est en train de saisir du texte */
     border: 1px solid $md_sys_color_primary;
     background-color: $md_sys_color_primary_container;
     color: $md_sys_color_on_primary_container;
 }
 
+/* QPushButton : Boutons */
+
 QPushButton {
     border-radius: 14px;
-    border: 0px solid black;
+    border: 0px;
     background-color: $md_sys_color_primary_container;
     color: $md_sys_color_on_primary_container;
     padding: 6px 10px;
@@ -100,6 +114,8 @@ QPushButton#red_button:hover {
     color: $md_sys_color_on_error;
 }
 
+/* QLabel : Éléments texte du programme */
+
 QLabel {
     color: $md_sys_color_on_surface;
 }
@@ -124,32 +140,110 @@ QLabel#selected_entry_password_label {
     letter-spacing: 0px;
 }
 
+/* QWidget#panel : Panneau listant les entrées */
+
 QWidget#panel {
     border-radius: 15px;
     background-color: $md_sys_color_surface_container_lowest;
 }
+
+/* QWidget#right_panel : Panneau contenant les informations de l'entrée sélectionnée */
 
 QWidget#right_panel {
     border-radius: 15px;
     background-color: $md_sys_color_surface_container_lowest;
 }
 
+/* QSplitter : Contenant qui permet de changer la taille de #panel et #right_panel */
+
 QSplitter, QSplitter::handle {
     background-color: transparent;
     border: none;
 }
 
+/* QScrollBar : Barre de défilement */
+
 QScrollBar:horizontal {
     height: 15px;
     margin: 5px 10px 5px 10px;
 }
+
 QScrollBar::handle:horizontal {
     background: $md_sys_color_surface_container_highest;
     border-radius: 2px;
     min-width: 20px;
 }
-QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { /* Boutons de la barre de défilement */
     height: 0;
     subcontrol-position: right;
     subcontrol-origin: margin;
+}
+
+QScrollBar:vertical {
+    width: 15px;
+    margin: 10px 5px 10px 5px;
+}
+
+QScrollBar::handle:vertical {
+    background: $md_sys_color_surface_container_highest;
+    border-radius: 2px;
+    min-height: 20px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { /* Boutons de la barre de défilement */
+    height: 0;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+/* QComboBox : Boîte déroulante */
+
+QComboBox {
+    border: 0px;
+    padding: 5px 10px 5px 8px;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background: none;
+}
+
+QComboBox:!editable, QComboBox::drop-down:editable {
+    background-color: $md_sys_color_tertiary_container;
+    color: $md_sys_color_on_tertiary_container;
+}
+
+QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+ QComboBox::drop-down {
+    padding-right: 8px;
+    border: none;
+}
+
+QComboBox::down-arrow {
+    image: url("themes/light/arrow_down.png");
+}
+
+QComboBox QAbstractItemView {
+    border: 0px;
+    padding: 2px;
+    background-color: $md_sys_color_tertiary_container;
+    color: $md_sys_color_on_tertiary_container;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+QComboBox QAbstractItemView::item:selected {
+    border: 0px;
+    color: $md_sys_color_on_tertiary_container;
+    background-color: $md_sys_color_tertiary_fixed_dim;
+    border-radius: 6px;
 }

@@ -27,7 +27,7 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QPushButton, QLineEdit
                                QHBoxLayout, QWidget, QScrollArea, QSplitter, QFrame, QMenuBar, QMenu, QToolBar, QComboBox,
                                QFileDialog)
 from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QFont, QPixmap, QAction, QClipboard, QImageReader, QIcon, QFontDatabase
+from PySide6.QtGui import QPixmap, QAction, QClipboard, QImageReader, QIcon, QFontDatabase
 
 # ════════════════════════════════════════════════════════════════════════════
 # ════════════════════════════ CORPS DU PROGRAMME ════════════════════════════
@@ -137,10 +137,13 @@ class zPass(QMainWindow):
 
         # ══════════ Actions du menu "Outils"
         
-        generate_password_action = QAction('Générateur de mot de passe', self)
+        generate_password_action = QAction('Générateur (Non-implémenté)', self)
         generate_password_action.setIcon(QIcon('./themes/light/dice.png'))
+        
+        settings_action = QAction('Paramètres (Non-implémenté)', self)
+        settings_action.setIcon(QIcon('./themes/light/settings.png'))
 
-        tools_menu.addActions([generate_password_action])
+        tools_menu.addActions([generate_password_action, settings_action])
 
         # ══════════ Actions du menu "Aide"
         
@@ -216,7 +219,7 @@ class zPass(QMainWindow):
             self.show_vault_creation_ui() # Si aucun coffre n'est détecté, on montre l'interface de création de coffre
 
         self.main_container.setLayout(self.main_layout) # On définit "main_layout" comme mise en page de "main_container"
-        self.setCentralWidget(self.root_container) # "root_container", contenant à présent tout les éléments nécessaires
+        self.setCentralWidget(self.root_container) # "root_container", contenant à présent tous les éléments nécessaires
     
     def init_decrypt_vault_ui(self):
         global selected_vault
@@ -237,8 +240,8 @@ class zPass(QMainWindow):
         # ═══════════--->---> zPass_logo : Logo du logiciel
 
         zPass_logo = QLabel() # On crée un contenant pour l'image
-        zPass_logo.setFixedSize(QSize(64, 64))
-        zPass_icon = QPixmap('./themes/logo.png').scaled(QSize(64, 64), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
+        zPass_logo.setFixedSize(QSize(246, 64))
+        zPass_icon = QPixmap('./themes/logo_complete.png').scaled(QSize(246, 64), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
         zPass_logo.setPixmap(zPass_icon)
 
         # ═══════════--->---> zPass_label : Texte contenant le nom du logiciel
@@ -247,9 +250,11 @@ class zPass(QMainWindow):
         zPass_label.setFixedHeight(64)
         zPass_label.setText('zPass')
         zPass_label.setObjectName('zPass_label')
+        zPass_label.setHidden(True)
 
         zPass_logo_container.addWidget(zPass_logo) # Ajout des éléments
         zPass_logo_container.addWidget(zPass_label)
+        zPass_logo_container.addWidget(QWidget(), 1)
         
         # ═══════════---> vault_selection_layout : Contient la liste déroulante permettant de choisir le coffre à déchiffrer
         
@@ -267,9 +272,14 @@ class zPass(QMainWindow):
         vault_list = self.list_available_vaults() # On obtient la liste des coffres-forts existants
         self.vault_selection_dropdown.addItems(vault_list) # On ajoute les coffres à la liste déroulante
         self.vault_selection_dropdown.currentTextChanged.connect(self.get_selected_vault_name)
+        self.vault_selection_dropdown.setFixedWidth(225)
+        
+        # https://stackoverflow.com/a/72196940
+        self.vault_selection_dropdown.view().window().setWindowFlags(Qt.Popup | Qt.FramelessWindowHint | Qt.NoDropShadowWindowHint)
+        self.vault_selection_dropdown.view().window().setAttribute(Qt.WA_TranslucentBackground)
 
-        vault_selection_layout.addWidget(decrypt_label, 4) # Ajout des éléments
-        vault_selection_layout.addWidget(self.vault_selection_dropdown, 2)
+        vault_selection_layout.addWidget(decrypt_label) # Ajout des éléments
+        vault_selection_layout.addWidget(self.vault_selection_dropdown)
         
         # ═══════════---> enter_master_password_label
         
@@ -400,8 +410,8 @@ class zPass(QMainWindow):
         # ═══════════--->---> zPass_logo : Logo du logiciel
 
         zPass_logo = QLabel()
-        zPass_logo.setFixedSize(QSize(64, 64))
-        zPass_icon = QPixmap('./themes/logo.png').scaled(QSize(64, 64), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
+        zPass_logo.setFixedSize(QSize(246, 64))
+        zPass_icon = QPixmap('./themes/logo_complete.png').scaled(QSize(246, 64), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
         zPass_logo.setPixmap(zPass_icon)
 
         # ═══════════--->---> zPass_label : Texte contenant le nom du logiciel
@@ -410,9 +420,11 @@ class zPass(QMainWindow):
         zPass_label.setFixedHeight(64)
         zPass_label.setText('zPass')
         zPass_label.setObjectName('zPass_label')
+        zPass_label.setHidden(True)
 
         zPass_logo_container.addWidget(zPass_logo) # Ajout des éléments
         zPass_logo_container.addWidget(zPass_label)
+        zPass_logo_container.addWidget(QWidget(), 1)
 
         # ═══════════--->---> new_vault_label : Texte contenant l'action qui est sur le point d'être réalisée
 
@@ -779,7 +791,7 @@ class zPass(QMainWindow):
         
         try: # On essaiera de convertir la saisie de l'utilisateur avec int()
             int(text_box.text()) # On convertit la saisie, de str() vers int()
-            if len(text_box.text()) != 6: # Si la longueur du code d'authentification n'est pas égale à 6
+            if len(text_box.text()) != 6: # Si la longueur du code d'authentification n'est pas égale à six
                 valid = False
                 label_wrong.setStyleSheet('') # Le texte redevient rouge
                 label_wrong.setText('Le code contient 6 chiffres') # Message d'erreur affiché à l'utilisateur
@@ -952,7 +964,7 @@ class zPass(QMainWindow):
             create_vault_status = create_vault(vault_name)
 
             if create_vault_status == 200: # Le coffre a été créé avec succès
-                selected_vault = vault_name # On met a jour le nom du coffre sélectionné
+                selected_vault = vault_name # On met à jour le nom du coffre sélectionné
                 new_vault_object =  {vault_name: {
                                             "file_path": f'vaults/{vault_name}.zpdb'
                                         }
@@ -1014,7 +1026,7 @@ class zPass(QMainWindow):
     def populate_entries_view(self):
         global passwords
 
-        entries_view = self.get_entries_view_colum_lists() # On récupère les colonnes des entrées et leur contenu
+        entries_view = self.get_entries_view_colum_lists() # On obtient les colonnes qui contiennent les informations des entrées
 
         # On supprime le contenu des colonnes, qui affichent les informations des entrées
         for widget in entries_view['icon_column']:
@@ -1105,7 +1117,7 @@ class zPass(QMainWindow):
                 # Pour chaque élément définit ci-dessus, on leur connecte une série d'événements : 
                 # enterEvent : Lorsque la souris survole l'élément, appelant la fonction "hover_entry"
                 # leaveEvent : Lorsque la souris quitte l'élément, appelant la fonction "unhover_entry"
-                # mousePressEvent : Lorsque la souris clique sur l'élément, appelant la fonction "select_entry"
+                # mousePressEvent : Quand la souris clique sur l'élément, appelant la fonction "select_entry"
                 for widget in [icon_container, name_label, gap_1, username_label, gap_2, password_label]:
                     widget.enterEvent = lambda *args, arg=icon_container: self.hover_entry(arg)
                     widget.leaveEvent = lambda *args, arg=icon_container: self.unhover_entry(arg)
@@ -1146,7 +1158,7 @@ class zPass(QMainWindow):
         global is_selected_entry_password_visible
         global show_password_button
 
-        entries_view = self.get_entries_view_colum_lists() # On récupère les colonnes des entrées et leur contenu
+        entries_view = self.get_entries_view_colum_lists() # On obtient les colonnes qui contiennent les informations des entrées
 
         if element in entries_view['icon_column']: # On récupère l'index de l'entrée
             entry_index = entries_view['icon_column'].index(element)
@@ -1162,7 +1174,7 @@ class zPass(QMainWindow):
             entries_view['gap_2_column'][selected_entry].setStyleSheet('background-color: transparent')
             entries_view['password_column'][selected_entry].setStyleSheet('background-color: transparent')
 
-            selected_entry = entry_index # On met a jour l'index de l'entrée sélectionnée
+            selected_entry = entry_index # On met à jour l'index de l'entrée sélectionnée
 
         # On change la couleur de fond de l'entrée sélectionnée
         entries_view['icon_column'][selected_entry].setStyleSheet('padding: 0 0 0 4px; background-color: rgb(179, 241, 191); border-top-left-radius: 8px; border-bottom-left-radius: 8px;')
@@ -1172,7 +1184,7 @@ class zPass(QMainWindow):
         entries_view['gap_2_column'][selected_entry].setStyleSheet('background-color: rgb(179, 241, 191)')
         entries_view['password_column'][selected_entry].setStyleSheet('background-color: rgb(179, 241, 191); border-top-right-radius: 8px; border-bottom-right-radius: 8px;')
 
-        remove_entry_action.setDisabled(False) # On active les actions qui nécéssitent qu'une entrée soit sélectionnée
+        remove_entry_action.setDisabled(False) # On active les actions qui nécessitent qu'une entrée soit sélectionnée
         new_entry_action.setDisabled(False)
         modify_entry_action.setDisabled(False)
 
@@ -1193,7 +1205,7 @@ class zPass(QMainWindow):
         icon = QPixmap(icon_path).scaled(QSize(128, 128), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
         selected_entry_icon_container.setPixmap(icon)
         
-        # selected_entry_name_title_label : Titre de délimitation, affiché au dessus du nom de l'entrée
+        # selected_entry_name_title_label : Titre de délimitation, affiché au-dessus du nom de l'entrée
         selected_entry_name_title_label = QLabel()
         selected_entry_name_title_label.setText('Nom')
         selected_entry_name_title_label.setObjectName('m_label') # On affecte l'identifiant CSS "m_label"
@@ -1215,7 +1227,7 @@ class zPass(QMainWindow):
         # On ajoute un espaceur pour que le nom de l'entrée ne prenne que la place nécessaire, et que le curseur ne change que lors du survol du texte
         selected_entry_name_label_layout.addWidget(QWidget(), 1)
 
-        # selected_entry_username_title_label : Titre de délimitation, affiché au dessus du nom d'utilisateur de l'entrée
+        # selected_entry_username_title_label : Titre de délimitation, affiché au-dessus du nom d'utilisateur de l'entrée
         selected_entry_username_title_label = QLabel()
         selected_entry_username_title_label.setText('Nom d\'utilisateur')
         selected_entry_username_title_label.setObjectName('m_label')
@@ -1235,7 +1247,7 @@ class zPass(QMainWindow):
         selected_entry_username_label_layout.addWidget(selected_entry_username_label) # Ajout des éléments
         selected_entry_username_label_layout.addWidget(QWidget(), 1) # Espaceur, pour les mêmes raisons que le nom de l'entrée
 
-        # selected_entry_username_title_label : Titre de délimitation, affiché au dessus du mot de passe de l'entrée
+        # selected_entry_username_title_label : Titre de délimitation, affiché au-dessus du mot de passe de l'entrée
         selected_entry_password_title_label = QLabel()
         selected_entry_password_title_label.setText('Mot de passe')
         selected_entry_password_title_label.setObjectName('m_label')
@@ -1268,7 +1280,7 @@ class zPass(QMainWindow):
         copy_password_button.setMaximumSize(QSize(28, 28))
         copy_password_button.clicked.connect(self.selected_entry_copy_password_button_clicked)
 
-        # On change l'icone du bouton "copy_password_button" on fonction de si la souris le survole ou pas
+        # On change l'icône du bouton "copy_password_button" en fonction de si la souris le survole ou pas
         copy_password_button.enterEvent = lambda *args: copy_password_button.setIcon(QIcon('./themes/light/copy_hover.png'))
         copy_password_button.leaveEvent = lambda *args: copy_password_button.setIcon(QIcon('./themes/light/copy.png'))
 
@@ -1290,7 +1302,7 @@ class zPass(QMainWindow):
     def deselect_entry(self):
         global selected_entry
 
-        entries_view = self.get_entries_view_colum_lists() # On vide le panneau qui sert à afficher les informations de l'entrée sélectionnée
+        entries_view = self.get_entries_view_colum_lists() # On obtient les colonnes qui contiennent les informations des entrées
 
         if selected_entry != None:
             # On réinitialise l'apparence de l'entrée sur le point d'être désélectionnée
@@ -1305,7 +1317,7 @@ class zPass(QMainWindow):
             
             self.clear_right_panel() # On vide le panneau qui sert à afficher les informations de l'entrée sélectionnée
 
-            remove_entry_action.setDisabled(True) # On désactive les actions qui nécéssitent qu'une entrée soit sélectionnée
+            remove_entry_action.setDisabled(True) # On désactive les actions qui nécessitent qu'une entrée soit sélectionnée
             modify_entry_action.setDisabled(True)
     
     def clear_right_panel(self):
@@ -1337,7 +1349,7 @@ class zPass(QMainWindow):
         new_entry_icon_actions_layout.setContentsMargins(0, 0, 0, 0)
         new_entry_icon_actions_container.setLayout(new_entry_icon_actions_layout)
 
-        # ---> select_new_entry_icon_button : Bouton servant a sélectionner une icône pour la nouvelle entrée
+        # ---> select_new_entry_icon_button : Bouton servant à sélectionner une icône pour la nouvelle entrée
         self.select_new_entry_icon_button = QPushButton('Sélectionner l\'icône')
         self.select_new_entry_icon_button.clicked.connect(self.select_new_entry_icon_button_clicked)
 
@@ -1347,16 +1359,16 @@ class zPass(QMainWindow):
         self.clear_new_entry_icon_button.setIcon(QIcon('./themes/light/close.png'))
         self.clear_new_entry_icon_button.setObjectName('red_button')
         self.clear_new_entry_icon_button.clicked.connect(self.clear_new_entry_icon_button_clicked)
-        self.clear_new_entry_icon_button.setHidden(True) # Bouton caché par défaut car aucune icône n'a été sélectionnée
+        self.clear_new_entry_icon_button.setHidden(True) # Bouton caché par défaut, car aucune icône n'a été sélectionnée
 
-        # On change l'icone du bouton "clear_new_entry_icon_button" on fonction de si la souris le survole ou pas
+        # On change l'icône du bouton "clear_new_entry_icon_button" en fonction de si la souris le survole ou pas
         self.clear_new_entry_icon_button.enterEvent = lambda *args: self.clear_new_entry_icon_button.setIcon(QIcon('./themes/light/close_hover.png'))
         self.clear_new_entry_icon_button.leaveEvent = lambda *args: self.clear_new_entry_icon_button.setIcon(QIcon('./themes/light/close.png'))
 
         new_entry_icon_actions_layout.addWidget(self.select_new_entry_icon_button) # Ajout des boutons
         new_entry_icon_actions_layout.addWidget(self.clear_new_entry_icon_button)
 
-        # new_entry_name_title_label : Titre de délimitation, affiché au dessus du champ de nom de la nouvelle entrée
+        # new_entry_name_title_label : Titre de délimitation, affiché au-dessus du champ de nom de la nouvelle entrée
         new_entry_name_title_label = QLabel()
         new_entry_name_title_label.setText('Nom')
         new_entry_name_title_label.setObjectName('m_label')
@@ -1366,7 +1378,7 @@ class zPass(QMainWindow):
         self.new_entry_name_text_box.setFixedHeight(28)
         self.new_entry_name_text_box.textChanged.connect(self.check_new_entry_name_validity) # On vérifie la saisie
 
-        # new_entry_username_title_label : Titre, affiché au dessus du champ de nom d'utilisateur de la nouvelle entrée
+        # new_entry_username_title_label : Titre, affiché au-dessus du champ de nom d'utilisateur de la nouvelle entrée
         new_entry_username_title_label = QLabel()
         new_entry_username_title_label.setText('Nom d\'utilisateur')
         new_entry_username_title_label.setObjectName('m_label')
@@ -1375,7 +1387,7 @@ class zPass(QMainWindow):
         self.new_entry_username_text_box = QLineEdit()
         self.new_entry_username_text_box.setFixedHeight(28)
 
-        # new_entry_password_title_label : Titre, affiché au dessus du champ de mot de passe de la nouvelle entrée
+        # new_entry_password_title_label : Titre, affiché au-dessus du champ de mot de passe de la nouvelle entrée
         new_entry_password_title_label = QLabel()
         new_entry_password_title_label.setText('Mot de passe')
         new_entry_password_title_label.setObjectName('m_label')
@@ -1431,45 +1443,51 @@ class zPass(QMainWindow):
         self.main_right_panel_layout.addWidget(new_entry_password_text_box_container)
         self.main_right_panel_layout.addWidget(actions_container)
         self.main_right_panel_layout.addWidget(QWidget(), 1) # Espaceur permettant de pousser vers le haut les éléments
-    
+
+    def get_icon_path(self):
+        # On ouvre une fenêtre de sélection de fichier, qui renvoie dès qu'elle est fermée un "tuple" avec comme premier élément le chemin du fichier sélectionné
+        new_icon_path = QFileDialog.getOpenFileName(self, 'Open file', 'c:\\', 'Image files (*.jpg *.png *.gif)')
+        
+        if new_icon_path[0] != '': # "new_icon_path" peut être égal si l'utilisateur a fermé la fenêtre sans rien sélectionner
+            icon = QPixmap(new_icon_path[0]).scaled(QSize(128, 128), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
+            valid = False # Drapeau de validité
+            while not valid:
+                random_id = ''.join([str(random.randint(0, 9)) for _ in range(10)]) # On génère un identifiant pour l'icône
+                try: # On vérifie qu'une icône avec le même nom n'éxiste pas déjà
+                    with open(f'./icons/{random_id}.png') as test:
+                        test.close()
+                except FileNotFoundError: # Le fichier n'éxiste pas, le nom est donc valide
+                    valid = True
+            icon_path = f'./icons/{random_id}.png'
+            icon.save(icon_path) # On sauvegarde l'icône dans le chemin "./icons/{random_id}.png"
+            return icon_path # On retourne le chemin de l'icône
+        return False
+
     def select_new_entry_icon_button_clicked(self):
         global new_entry_selected_icon_path
 
-        new_selected_icon_path = self.get_icon_path()
+        new_selected_icon_path = self.get_icon_path() # On récupère le chemin de la nouvelle icône
         
-        if new_selected_icon_path:
-            new_entry_selected_icon_path = new_selected_icon_path
+        if new_selected_icon_path: # Si "new_selected_icon_path" n'est pas égal a False
+            new_entry_selected_icon_path = new_selected_icon_path # On met à jour la variable qui stocke le chemin de l'icône
+            # On initialise "new_entry_icon", qui correspond à la nouvelle icône redimensionnée en 128x128
             new_entry_icon = QPixmap(new_selected_icon_path).scaled(QSize(128, 128), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
-            self.new_entry_icon_container.setPixmap(new_entry_icon)
+            self.new_entry_icon_container.setPixmap(new_entry_icon) # On applique la nouvelle icône
 
-            self.clear_new_entry_icon_button.setHidden(False)
-    
-    def get_icon_path(self):
-        new_icon_path = QFileDialog.getOpenFileName(self, 'Open file', 'c:\\', 'Image files (*.jpg *.png *.gif)')
-        if new_icon_path[0] != '':
-            icon = QPixmap(new_icon_path[0]).scaled(QSize(128, 128), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
-            valid = False
-            while not valid:
-                random_id = ''.join([str(random.randint(0, 9)) for _ in range(10)])
-                try:
-                    with open(f'./icons/{random_id}.png') as test:
-                        test.close()
-                except FileNotFoundError:
-                    valid = True
-            icon_path = f'./icons/{random_id}.png'
-            icon.save(icon_path)
-            return icon_path
-        return False
+            self.clear_new_entry_icon_button.setHidden(False) # On affiche le bouton qui sert à effacer l'icône
 
     def modify_entry_icon_button_clicked(self):
         global modified_icon_path
 
-        test_modified_icon_path = self.get_icon_path()
+        test_modified_icon_path = self.get_icon_path() # On récupère le chemin de la nouvelle icône
+
         if test_modified_icon_path:
-            modified_icon_path = test_modified_icon_path
+            modified_icon_path = test_modified_icon_path # On met à jour la variable qui stocke le chemin de l'icône
+            # On initialise "modified_icon", qui correspond à la nouvelle icône redimensionnée en 128x128
             modified_icon = QPixmap(modified_icon_path).scaled(QSize(128, 128), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
-            self.modified_icon_container.setPixmap(modified_icon)
-            self.clear_modified_entry_icon_button.setHidden(False)
+            self.modified_icon_container.setPixmap(modified_icon) # On applique la nouvelle icône
+            
+            self.clear_modified_entry_icon_button.setHidden(False) # On affiche le bouton qui sert à effacer l'icône
     
     def modify_entry_action_clicked(self):
         global modified_icon_path
@@ -1479,8 +1497,9 @@ class zPass(QMainWindow):
             passwords_keys = [i for i in passwords['entries']]
             entry_data = passwords['entries'][passwords_keys[selected_entry]]
 
-            self.clear_right_panel()
+            self.clear_right_panel() # On vide le panneau qui sert à afficher les informations de l'entrée sélectionnée
 
+            # On récupère le nom, le chemin de l'icône, le nom d'utilisateur et le mot de passe de chaque entrée
             modified_icon_path = entry_data['icon_path']
             if modified_icon_path == '':
                 modified_icon_path = './themes/light/no_icon_dp.png'
@@ -1488,65 +1507,79 @@ class zPass(QMainWindow):
             password = entry_data['password']
             username = entry_data['username']
 
+            # modified_icon_container : Contient l'icône de l'entrée
             self.modified_icon_container = QLabel()
             self.modified_icon_container.setFixedSize(QSize(128, 128))
             icon = QPixmap(modified_icon_path).scaled(QSize(128, 128), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
             self.modified_icon_container.setPixmap(icon)
 
+            # modified_entry_icon_actions_container : Contient les boutons de modification et de réinitialisation de l'icône
             modified_entry_icon_actions_container = QWidget()
             modified_entry_icon_actions_layout = QHBoxLayout()
             modified_entry_icon_actions_layout.setContentsMargins(0, 0, 0, 0)
             modified_entry_icon_actions_container.setLayout(modified_entry_icon_actions_layout)
 
+            # ---> modify_entry_icon_button : Bouton servant à changer l'icône de l'entrée
+            self.modify_entry_icon_button = QPushButton('Changer l\'icône')
+            self.modify_entry_icon_button.clicked.connect(self.modify_entry_icon_button_clicked)
+
+            # ---> clear_modified_entry_icon_button : Bouton servant à réinitialiser l'icône
             self.clear_modified_entry_icon_button = QPushButton()
             self.clear_modified_entry_icon_button.setMaximumSize(QSize(28, 28))
             self.clear_modified_entry_icon_button.setObjectName('red_button')
             self.clear_modified_entry_icon_button.clicked.connect(self.clear_modified_entry_icon_button_clicked)
             self.clear_modified_entry_icon_button.setIcon(QIcon('./themes/light/close.png'))
 
+            # On change l'icône du bouton "clear_modified_entry_icon_button" en fonction de si la souris le survole ou pas
             self.clear_modified_entry_icon_button.enterEvent = lambda *args: self.clear_modified_entry_icon_button.setIcon(QIcon('./themes/light/close_hover.png'))
             self.clear_modified_entry_icon_button.leaveEvent = lambda *args: self.clear_modified_entry_icon_button.setIcon(QIcon('./themes/light/close.png'))
 
+            # Si aucune icône n'est sélectionnée, on cache le bouton de réinitialisation
             if modified_icon_path == './themes/light/no_icon_dp.png':
                 self.clear_modified_entry_icon_button.setHidden(True)
 
-            self.modify_entry_icon_button = QPushButton('Changer l\'icône')
-            self.modify_entry_icon_button.clicked.connect(self.modify_entry_icon_button_clicked)
-
-            modified_entry_icon_actions_layout.addWidget(self.modify_entry_icon_button)
+            modified_entry_icon_actions_layout.addWidget(self.modify_entry_icon_button) # Ajout des boutons
             modified_entry_icon_actions_layout.addWidget(self.clear_modified_entry_icon_button)
 
+            # new_entry_name_title_label : Titre de délimitation, affiché au-dessus du champ de nom de l'entrée
             new_entry_name_title_label = QLabel()
             new_entry_name_title_label.setText('Nom')
             new_entry_name_title_label.setObjectName('m_label')
             
+            # modify_entry_name_text_box : Champ qui contient par défaut le nom de l'entrée, pour qu'il puisse être modifié
             self.modify_entry_name_text_box = QLineEdit()
             self.modify_entry_name_text_box.setFixedHeight(28)
             self.modify_entry_name_text_box.textChanged.connect(self.check_modified_entry_name_validity)
             self.modify_entry_name_text_box.setText(old_entry_name)
 
+            # new_entry_username_title_label : Titre, affiché au-dessus du champ de nom d'utilisateur de l'entrée
             new_entry_username_title_label = QLabel()
             new_entry_username_title_label.setText('Nom d\'utilisateur')
             new_entry_username_title_label.setObjectName('m_label')
 
+            # modify_entry_username_text_box : Champ qui contient le nom d'utilisateur de l'entrée, pour modifications
             self.modify_entry_username_text_box = QLineEdit()
             self.modify_entry_username_text_box.setFixedHeight(28)
             self.modify_entry_username_text_box.setText(username)
 
+            # new_entry_password_title_label : Titre, affiché au-dessus du champ de mot de passe de l'entrée
             new_entry_password_title_label = QLabel()
             new_entry_password_title_label.setText('Mot de passe')
             new_entry_password_title_label.setObjectName('m_label')
 
+            # modify_entry_password_text_box_container
             modify_entry_password_text_box_container = QWidget()
             modify_entry_password_text_box_layout = QHBoxLayout()
             modify_entry_password_text_box_layout.setContentsMargins(0, 0, 0, 0)
             modify_entry_password_text_box_container.setLayout(modify_entry_password_text_box_layout)
 
+            # ---> modify_entry_password_text_box : Champ qui contient le mot de passe de l'entrée, pour modifications
             self.modify_entry_password_text_box = QLineEdit()
             self.modify_entry_password_text_box.setFixedHeight(28)
             self.modify_entry_password_text_box.setEchoMode(QLineEdit.Password)
             self.modify_entry_password_text_box.setText(password)
 
+            # ---> show_password_button : Bouton servant à afficher ou cacher le mot de passe
             show_password_button = QPushButton()
             show_password_button.setIcon(QIcon('./themes/light/visibility_off.png'))
             show_password_button.setObjectName('checkable')
@@ -1554,26 +1587,29 @@ class zPass(QMainWindow):
             show_password_button.clicked.connect(lambda *args, arg1=self.modify_entry_password_text_box, arg2=show_password_button: self.toggle_echo_mode(arg1, arg2))
             show_password_button.setCheckable(True)
 
-            modify_entry_password_text_box_layout.addWidget(self.modify_entry_password_text_box, 1)
+            modify_entry_password_text_box_layout.addWidget(self.modify_entry_password_text_box, 1) # Ajout des éléments
             modify_entry_password_text_box_layout.addWidget(show_password_button)
 
+            # actions_container : Contient les boutons "save_modifications_button" et "cancel_modification_button"
             actions_container = QWidget()
             actions_layout = QHBoxLayout()
             actions_layout.setContentsMargins(0, 0, 0, 0)
             actions_container.setLayout(actions_layout)
 
+            # ---> save_modifications_button : Bouton servant à enregistrer les modifications
             save_modifications_button = QPushButton('Sauvegarder')
             save_modifications_button.clicked.connect(self.save_entry_modifications_button_clicked)
 
+            # ---> cancel_modification_button : Bouton servant à annuler les modifications
             cancel_modification_button = QPushButton('Annuler')
             cancel_modification_button.clicked.connect(self.cancel_entry_modification_button_clicked)
             cancel_modification_button.setObjectName('red_button')
 
-            actions_layout.addWidget(QWidget(), 1)
+            actions_layout.addWidget(QWidget(), 1) # Ajout des éléments
             actions_layout.addWidget(save_modifications_button)
             actions_layout.addWidget(cancel_modification_button)
 
-            self.main_right_panel_layout.addWidget(self.modified_icon_container, alignment=Qt.AlignCenter)
+            self.main_right_panel_layout.addWidget(self.modified_icon_container, alignment=Qt.AlignCenter) # Ajout des éléments
             self.main_right_panel_layout.addWidget(modified_entry_icon_actions_container)
             self.main_right_panel_layout.addWidget(new_entry_name_title_label)
             self.main_right_panel_layout.addWidget(self.modify_entry_name_text_box)
@@ -1582,12 +1618,13 @@ class zPass(QMainWindow):
             self.main_right_panel_layout.addWidget(new_entry_password_title_label)
             self.main_right_panel_layout.addWidget(modify_entry_password_text_box_container)
             self.main_right_panel_layout.addWidget(actions_container)
-            self.main_right_panel_layout.addWidget(QWidget(), 1)
+            self.main_right_panel_layout.addWidget(QWidget(), 1) # Espaceur permettant de pousser vers le haut les éléments
 
     def save_entry_modifications_button_clicked(self):
-        if self.check_modified_entry_name_validity():
-            del passwords['entries'][old_entry_name]
+        if self.check_modified_entry_name_validity(): # Si le nom de l'entrée est valide
+            del passwords['entries'][old_entry_name] # On supprime la vieille entrée
 
+            # On récupère le nom, le chemin de l'icône, le nom d'utilisateur et le mot de passe de l'entrée modifiée
             modified_entry_name = self.modify_entry_name_text_box.text()
             modified_entry_icon_path = modified_icon_path
             modified_entry_username = self.modify_entry_username_text_box.text()
@@ -1599,18 +1636,21 @@ class zPass(QMainWindow):
                                         "username": modified_entry_username,
                                         "password": modified_entry_password
                                     }
-                                }
+                                } # On initialise un dictionnaire contenant toutes les informations de l'entrée
 
             passwords['entries'].update(new_entry_object)
             passwords_json = json.dumps(passwords, indent=4, sort_keys=True)
             with open('.temp_vault.zpdb', 'w') as passwords_file:
-                passwords_file.write(passwords_json)
+                passwords_file.write(passwords_json) # On met à jour le coffre-fort
             
-            self.deselect_entry()
-            self.populate_entries_view()
+            self.deselect_entry() # On désélectionne l'entrée que l'on vient de modifier
+            self.populate_entries_view() # On met à jour la liste des entrées
+
             passwords_keys = [i for i in passwords['entries']]
-            selected_entry = passwords_keys.index(modified_entry_name)
+            selected_entry = passwords_keys.index(modified_entry_name) # On récupère le nouvel index de l'entrée modifiée
             entry_data = passwords['entries'][passwords_keys[selected_entry]]
+            # On re-sélectionne l'entrée modifiée, car les entrées sont triées par ordre alphabétique, et la position de
+            # l'entrée modifiée aurait pu changer si son nom a été modifié
             self.select_entry(self.get_entries_view_colum_lists()['icon_column'][selected_entry], entry_data)
     
     def cancel_entry_creation_button_clicked(self):
@@ -1618,44 +1658,48 @@ class zPass(QMainWindow):
 
         selected_entry = None
         
-        self.clear_right_panel()
+        self.clear_right_panel() # On vide le panneau qui sert à afficher les informations de l'entrée sélectionnée
 
-        new_entry_action.setDisabled(False)
+        new_entry_action.setDisabled(False) # On désélectionne les entrées qui ont besoin qu'une entrée soit sélectionnée
         remove_entry_action.setDisabled(True)
         modify_entry_action.setDisabled(True)
 
     def cancel_entry_modification_button_clicked(self):
         if selected_entry != None:
-            self.clear_right_panel()
-            passwords_keys = [i for i in passwords['entries']] #!
+            self.clear_right_panel() # On vide le panneau qui sert à afficher les informations de l'entrée sélectionnée
+            passwords_keys = [i for i in passwords['entries']]
             entry_data = passwords['entries'][passwords_keys[selected_entry]]
 
+            # On re-sélectionne l'entrée dont la modification a été annulée
             self.select_entry(self.get_entries_view_colum_lists()['icon_column'][selected_entry], entry_data)
     
     def clear_modified_entry_icon_button_clicked(self):
         global modified_icon_path
 
+        # On récupère l'icône par défaut lorsque aucune n'est présente
         icon = QPixmap('./themes/light/no_icon_dp.png').scaled(QSize(128, 128), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
         self.modified_icon_container.setPixmap(icon)
-        os.remove(modified_icon_path)
+        os.remove(modified_icon_path) # On supprime l'icône
 
         modified_icon_path = ''
 
-        self.clear_modified_entry_icon_button.setHidden(True)
+        self.clear_modified_entry_icon_button.setHidden(True) # On cache le bouton servant à réinitialiser l'icône
 
     def clear_new_entry_icon_button_clicked(self):
         global new_entry_selected_icon_path
 
+        # On récupère l'icône par défaut lorsque aucune n'est présente
         icon = QPixmap('./themes/light/no_icon_dp.png').scaled(QSize(128, 128), mode=Qt.SmoothTransformation, aspectMode=Qt.KeepAspectRatio)
         self.new_entry_icon_container.setPixmap(icon)
         os.remove(new_entry_selected_icon_path)
 
         new_entry_selected_icon_path = ''
 
-        self.clear_new_entry_icon_button.setHidden(True)
+        self.clear_new_entry_icon_button.setHidden(True) # On cache le bouton servant à réinitialiser l'icône
     
     def create_new_entry_button_clicked(self):
-        if self.check_new_entry_name_validity():
+        if self.check_new_entry_name_validity(): # Si le nom de l'entrée est valide
+            # On récupère le nom, le chemin de l'icône, le nom d'utilisateur et le mot de passe de la nouvelle entrée
             new_entry_name = self.new_entry_name_text_box.text()
             new_entry_icon_path = new_entry_selected_icon_path
             new_entry_username = self.new_entry_username_text_box.text()
@@ -1667,53 +1711,53 @@ class zPass(QMainWindow):
                                         "username": new_entry_username,
                                         "password": new_entry_password
                                     }
-                                }
+                                } # On initialise un dictionnaire contenant toutes les informations de l'entrée
 
             passwords['entries'].update(new_entry_object)
             passwords_json = json.dumps(passwords, indent=4, sort_keys=True)
             with open('.temp_vault.zpdb', 'w') as passwords_file:
-                passwords_file.write(passwords_json)
+                passwords_file.write(passwords_json) # On met à jour le coffre-fort
             
             self.deselect_entry()
-            self.populate_entries_view()
+            self.populate_entries_view() # On met à jour la liste des entrées
 
             new_entry_action.setDisabled(False)
 
     def remove_entry_action_clicked(self):
         if selected_entry != None:
             passwords_keys = [i for i in passwords['entries']]
-            del passwords['entries'][passwords_keys[selected_entry]]
+            del passwords['entries'][passwords_keys[selected_entry]] # On supprime l'entrée du dictionnaire des entrées
 
             passwords_json = json.dumps(passwords, indent=4, sort_keys=True)
             with open('.temp_vault.zpdb', 'w') as passwords_file:
-                passwords_file.write(passwords_json)
+                passwords_file.write(passwords_json) # On met à jour le coffre-fort
 
             self.deselect_entry()
-            self.populate_entries_view()
+            self.populate_entries_view() # On met à jour la liste des entrées
 
     def selected_entry_show_password_button_clicked(self):
         global is_selected_entry_password_visible
 
-        if is_selected_entry_password_visible:
-            show_password_button.setIcon(QIcon('./themes/light/visibility_off.png'))
-            selected_entry_password_label.setText(selected_entry_hidden_password)
+        if is_selected_entry_password_visible: # Si le mot de passe de l'entrée sélectionnée est visible
+            show_password_button.setIcon(QIcon('./themes/light/visibility_off.png')) # On bascule l'icône du bouton
+            selected_entry_password_label.setText(selected_entry_hidden_password) # On cache le mot de passe
             is_selected_entry_password_visible = False
-        else:
-            show_password_button.setIcon(QIcon('./themes/light/visibility_on.png'))
-            selected_entry_password_label.setText(selected_entry_password)
+        else: # Sinon
+            show_password_button.setIcon(QIcon('./themes/light/visibility_on.png')) # On bascule l'icône du bouton
+            selected_entry_password_label.setText(selected_entry_password) # On affiche le mot de passe
             is_selected_entry_password_visible = True
     
     def selected_entry_copy_password_button_clicked(self):
         clipboard = QClipboard()
-        clipboard.setText(selected_entry_password)
+        clipboard.setText(selected_entry_password) # On copie le mot de passe au presse-papiers
     
-    def hover_entry(self, element):
+    def hover_entry(self, element): # Fonction appelée lorsque l'utilisateur survole une entrée
         entries_view = self.get_entries_view_colum_lists()
 
         if element in entries_view['icon_column']:
-            entry_index = entries_view['icon_column'].index(element)
+            entry_index = entries_view['icon_column'].index(element) # On récupère l'index de l'entrée survolée
         
-        if entry_index != selected_entry:
+        if entry_index != selected_entry: # On change la couleur de fond de l'entrée survolée
             entries_view['icon_column'][entry_index].setStyleSheet('padding: 0 0 0 4px; background-color: rgb(235, 239, 231); border-top-left-radius: 8px; border-bottom-left-radius: 8px;')
             entries_view['name_column'][entry_index].setStyleSheet('background-color: rgb(235, 239, 231)')
             entries_view['gap_1_column'][entry_index].setStyleSheet('background-color: rgb(235, 239, 231)')
@@ -1721,7 +1765,7 @@ class zPass(QMainWindow):
             entries_view['gap_2_column'][entry_index].setStyleSheet('background-color: rgb(235, 239, 231)')
             entries_view['password_column'][entry_index].setStyleSheet('background-color: rgb(235, 239, 231); border-top-right-radius: 8px; border-bottom-right-radius: 8px;')
     
-    def get_entries_view_colum_lists(self) -> dict:
+    def get_entries_view_colum_lists(self) -> dict: # Fonction retournant un dictionnaire des colonnes et de leur contenu
         return {
             'icon_column': [self.icon_column.itemAt(i).widget() for i in range(self.icon_column.count())],
             'name_column': [self.name_column.itemAt(i).widget() for i in range(self.name_column.count())],
@@ -1731,13 +1775,13 @@ class zPass(QMainWindow):
             'password_column': [self.password_column.itemAt(i).widget() for i in range(self.password_column.count())]
         }
 
-    def unhover_entry(self, element):
+    def unhover_entry(self, element): # Fonction appelée lorsque l'utilisateur ne survole plus l'entrée
         entries_view = self.get_entries_view_colum_lists()
 
         if element in entries_view['icon_column']:
-            entry_index = entries_view['icon_column'].index(element)
-        
-        if entry_index != selected_entry:
+            entry_index = entries_view['icon_column'].index(element) # On récupère l'index de l'entrée concernée
+         
+        if entry_index != selected_entry: # On change la couleur de fond de l'entrée qui n'est plus survolée
             entries_view['icon_column'][entry_index].setStyleSheet('padding: 0 0 0 4px; background-color: transparent')
             entries_view['name_column'][entry_index].setStyleSheet('background-color: transparent')
             entries_view['gap_1_column'][entry_index].setStyleSheet('background-color: transparent')
@@ -1747,25 +1791,26 @@ class zPass(QMainWindow):
 
     def create_dialog(self, title, content): # Petite fonction ayant pour but de créer de simples boîtes de dialogue
         dialog = QMessageBox(self)
-        dialog.setWindowIcon(QIcon('./themes/logo_64.png'))
-        dialog.setWindowTitle(title)
-        dialog.setText(content)
-        dialog.exec()
+        dialog.setWindowIcon(QIcon('./themes/logo_64.png')) # Icône du dialogue
+        dialog.setWindowTitle(title) # Titre du dialogue
+        dialog.setText(content) # Message du dialogue
+        dialog.exec() # Exécution du dialogue : il est affiché à l'utilisateur
     
     def toggle_echo_mode(self, text_box, button):
         if text_box.echoMode() == QLineEdit.Password: # Si le champ est en mode mot de passe...
             text_box.setEchoMode(QLineEdit.Normal) # ...On le fait passer en mode normal
             button.setChecked(True) # On change l'apparence du bouton
-            button.setIcon(QIcon('./themes/light/visibility_on.png'))
+            button.setIcon(QIcon('./themes/light/visibility_on.png')) # On change l'icône du bouton
         else: # Sinon = si le champ est en mode normal...
             text_box.setEchoMode(QLineEdit.Password) # ...On le fait passer en mode mot de passe
-            button.setChecked(False)
-            button.setIcon(QIcon('./themes/light/visibility_off.png'))
+            button.setChecked(False) # On change l'apparence du bouton
+            button.setIcon(QIcon('./themes/light/visibility_off.png')) # On change l'icône du bouton
     
     def launch_checks(self):
         try: # Pour vérifier si le programme a été fermé correctement, on vérifie si le coffre temporaire existe toujours
             decrypted_vault_file = open('.temp_vault.zpdb')
             decrypted_vault_file.close()
+
             dialog = QMessageBox(self)
             dialog.setWindowIcon(QIcon('./themes/logo_64.png'))
             dialog.setWindowTitle('Erreur')
@@ -1793,13 +1838,14 @@ if __name__ == '__main__':
     root = QApplication(sys.argv)
 
     root.setStyleSheet(get_style_sheet()) # On applique la feuille de style au programme
+    root.setEffectEnabled(Qt.UI_AnimateCombo, False)
 
-    QImageReader.setAllocationLimit(0) # Permet de charger des icônes plus lourdes
+    QImageReader.setAllocationLimit(0) # Permet de charger des icônes plus larges / lourdes
     QFontDatabase.addApplicationFont('./themes/fonts/Urbanist-Light.ttf') # On charge les polices utilisées dans le programme
     QFontDatabase.addApplicationFont('./themes/fonts/Inter-Regular.ttf')
     QFontDatabase.addApplicationFont('./themes/fonts/JetBrainsMono-Regular.ttf')
     
-    splash_window = zPass()
-    splash_window.show()
+    zPass_window = zPass()
+    zPass_window.show()
 
     sys.exit(root.exec())
